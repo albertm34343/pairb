@@ -37,7 +37,7 @@ async def start(message: types.Message):
         invite_link = f"https://t.me/{bot_username}?start={invite_token}"
         
         kb = InlineKeyboardMarkup(inline_keyboard=[
-            [InlineKeyboardButton(text="🔗 Скопировать ссылку", copy_text=types.CopyText(text=invite_link))]
+            [InlineKeyboardButton(text="🔗 Открыть приложение", url=invite_link)]
         ])
         
         await message.answer(
