@@ -123,6 +123,9 @@ async def process_accept(callback: types.CallbackQuery):
         
         pair.user2_id = user2.id
         user2.pair_id = pair.id
+        user1 = await session.get(User, pair.user1_id)
+        if user1:
+            user1.pair_id = pair.id
         await session.commit()
         
         kb = InlineKeyboardMarkup(inline_keyboard=[
@@ -135,7 +138,6 @@ async def process_accept(callback: types.CallbackQuery):
             reply_markup=kb
         )
         
-        user1 = await session.get(User, pair.user1_id)
         try:
             await callback.bot.send_message(
                 user1.telegram_id,
