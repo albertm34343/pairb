@@ -80,6 +80,20 @@
         .menu-button:hover {
             background: #e0e0e0;
         }
+        
+        .back-button {
+            background: #f0f0f0;
+            color: #333;
+            margin-bottom: 16px;
+        }
+        
+        .danger-button {
+            background: #ff3b30;
+        }
+        
+        .danger-button:hover {
+            background: #cc2d24;
+        }
     </style>
 </head>
 <body>
@@ -128,8 +142,52 @@
         <h1>💑 PairB</h1>
         <p style="text-align:center; margin-bottom:24px; color:#666;" id="welcome-text"></p>
         
+        <button class="menu-button" onclick="showSettings()">⚙️ Настройки</button>
         <button class="menu-button" onclick="alert('Интерактив скоро появится')">🎮 Интерактив</button>
-        <button class="menu-button" onclick="alert('Настройки скоро появятся')">⚙️ Настройки</button>
+    </div>
+    
+    <div class="container" id="settings-container" style="display:none;">
+        <button class="back-button" onclick="showMain()">← Назад</button>
+        <h1>⚙️ Настройки</h1>
+        
+        <div class="form-group">
+            <label>Имя</label>
+            <input type="text" id="settings-name">
+        </div>
+        
+        <div class="form-group">
+            <label>Пол</label>
+            <select id="settings-gender">
+                <option value="male">Мужской</option>
+                <option value="female">Женский</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label>Дата начала отношений</label>
+            <input type="date" id="settings-relationship_date">
+        </div>
+        
+        <div class="form-group">
+            <label>Город</label>
+            <input type="text" id="settings-city">
+        </div>
+        
+        <div class="form-group">
+            <label>Личные увлечения</label>
+            <textarea id="settings-personal_hobbies" rows="3"></textarea>
+        </div>
+        
+        <div class="form-group">
+            <label>Совместные увлечения</label>
+            <textarea id="settings-shared_hobbies" rows="3"></textarea>
+        </div>
+        
+        <button onclick="saveSettings()">Сохранить изменения</button>
+        
+        <div style="height: 24px;"></div>
+        
+        <button class="danger-button" onclick="breakPair()">💔 Разорвать пару</button>
     </div>
     
     <div class="container" id="no-pair-container" style="display:none;">
@@ -142,9 +200,10 @@
         const tg = window.Telegram.WebApp;
         tg.expand();
         
+        let currentUser = null;
+        
         async function checkOnboarding() {
             const telegram_id = tg.initDataUnsafe?.user?.id;
-            console.log('TELEGRAM_ID:', telegram_id);
             
             if (!telegram_id) {
                 alert('Ошибка: нет данных пользователя');
@@ -158,6 +217,7 @@
                 if (!data.exists) {
                     document.getElementById('no-pair-container').style.display = 'block';
                 } else if (data.onboarding_done) {
+                    currentUser = data;
                     document.getElementById('main-container').style.display = 'block';
                     document.getElementById('welcome-text').textContent = `Привет, ${data.name}!`;
                 } else {
@@ -192,11 +252,90 @@
                 });
                 
                 if (response.ok) {
+                    currentUser = data;
                     document.getElementById('onboarding-container').style.display = 'none';
                     document.getElementById('main-container').style.display = 'block';
                     document.getElementById('welcome-text').textContent = `Привет, ${data.name}!`;
                 } else {
                     alert('Ошибка сохранения');
+                }
+            } catch (e) {
+                alert('Ошибка сети');
+            }
+        }
+        
+        async function showSettings() {
+            document.getElementById('main-container').style.display = 'none';
+            document.getElementById('settings-container').style.display = 'block';
+            
+            const telegram_id = tg.initDataUnsafe?.user?.id;
+            
+            try {
+                const response = await fetch(`/api/get_profile/${telegram_id}`);
+                const data = await response.json();
+                
+                document.getElementById('settings-name').value = data.name || '';
+                document.getElementById('settings-gender').value = data.gender || 'male';
+                document.getElementById('settings-relationship_date').value = data.relationship_date || '';
+                document.getElementById('settings-city').value = data.city || '';
+                document.getElementById('settings-personal_hobbies').value = data.personal_hobbies || '';
+                document.getElementById('settings-shared_hobbies').value = data.shared_hobbies || '';
+            } catch (e) {
+                alert('Ошибка загрузки профиля');
+            }
+        }
+        
+        function showMain() {
+            document.getElementById('settings-container').style.display = 'none';
+            document.getElementById('main-container').style.display = 'block';
+            document.getElementById('welcome-text').textContent = `Привет, ${currentUser.name}!`;
+        }
+        
+        async function saveSettings() {
+            const data = {
+                telegram_id: tg.initDataUnsafe?.user?.id,
+                name: document.getElementById('settings-name').value,
+                gender: document.getElementById('settings-gender').value,
+                relationship_date: document.getElementById('settings-relationship_date').value,
+                city: document.getElementById('settings-city').value,
+                personal_hobbies: document.getElementById('settings-personal_hobbies').value,
+                shared_hobbies: document.getElementById('settings-shared_hobbies').value
+            };
+            
+            try {
+                const response = await fetch('/api/update_profile', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                if (response.ok) {
+                    alert('Данные обновлены!');
+                    currentUser.name = data.name;
+                    showMain();
+                } else {
+                    alert('Ошибка сохранения');
+                }
+            } catch (e) {
+                alert('Ошибка сети');
+            }
+        }
+        
+        async function breakPair() {
+            if (!confirm('Вы уверены, что хотите разорвать пару?')) return;
+            
+            const telegram_id = tg.initDataUnsafe?.user?.id;
+            
+            try {
+                const response = await fetch(`/api/break_pair/${telegram_id}`, {
+                    method: 'POST'
+                });
+                
+                if (response.ok) {
+                    alert('Пара разорвана');
+                    tg.close();
+                } else {
+                    alert('Ошибка');
                 }
             } catch (e) {
                 alert('Ошибка сети');
