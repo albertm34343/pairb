@@ -137,10 +137,14 @@
         const tg = window.Telegram.WebApp;
         tg.expand();
         
+        console.log('TG OBJECT:', tg);
+        console.log('INIT DATA:', tg.initData);
+        console.log('UNSAFE:', tg.initDataUnsafe);
+        alert(JSON.stringify(tg.initDataUnsafe));
+        
         async function checkOnboarding() {
             const telegram_id = tg.initDataUnsafe?.user?.id;
             console.log('TELEGRAM_ID:', telegram_id);
-            console.log('INIT_DATA:', tg.initDataUnsafe);
             
             if (!telegram_id) {
                 alert('Ошибка: нет данных пользователя');
