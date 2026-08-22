@@ -1,5 +1,5 @@
 from aiogram import Router, types
-from aiogram.filters import Command, CommandStart
+from aiogram.filters import CommandStart
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from core.db import async_session
 from core.models import User, Pair
@@ -10,11 +10,9 @@ router = Router()
 
 @router.message(CommandStart())
 async def start(message: types.Message):
-    # Проверяем, есть ли deep-link (инвайт)
     args = message.text.split()
     
     if len(args) > 1:
-        # Это переход по инвайту
         await accept_invite(message, args[1])
         return
     
@@ -58,7 +56,6 @@ async def start(message: types.Message):
 
 async def accept_invite(message: types.Message, invite_token: str):
     async with async_session() as session:
-        # Ищем приглашение
         pair = await session.scalar(
             select(Pair).where(Pair.invite_token == invite_token)
         )
@@ -71,12 +68,11 @@ async def accept_invite(message: types.Message, invite_token: str):
             await message.answer("❌ Эта пара уже создана")
             return
         
-        # Проверяем, что это не тот же юзер
-        if pair.user1_id == message.from_user.id:
+        user1 = await session.get(User, pair.user1_id)
+        if user1 and user1.telegram_id == str(message.from_user.id):
             await message.answer("❌ Нельзя пригласить самого себя")
             return
         
-        # Создаём второго юзера
         user2 = await session.scalar(
             select(User).where(User.telegram_id == str(message.from_user.id))
         )
@@ -90,29 +86,63 @@ async def accept_invite(message: types.Message, invite_token: str):
             await session.commit()
             await session.refresh(user2)
         
-        # Привязываем к паре
+        kb = InlineKeyboardMarkup(inline_keyboard=[
+            [InlineKeyboardButton(text="✅ Принять приглашение", callback_data=f"accept_{invite_token}")]
+        ])
+        
+        await message.answer(
+            "💑 Вас пригласили в пару!\n\n"
+            "Нажмите кнопку ниже, чтобы принять приглашение и создать пару.",
+            reply_markup=kb
+        )
+
+@router.callback_query(lambda c: c.data and c.data.startswith("accept_"))
+async def process_accept(callback: types.CallbackQuery):
+    invite_token = callback.data.replace("accept_", "")
+    
+    async with async_session() as session:
+        pair = await session.scalar(
+            select(Pair).where(Pair.invite_token == invite_token)
+        )
+        
+        if not pair:
+            await callback.answer("Приглашение не найдено", show_alert=True)
+            return
+        
+        if pair.user2_id:
+            await callback.answer("Пара уже создана", show_alert=True)
+            return
+        
+        user2 = await session.scalar(
+            select(User).where(User.telegram_id == str(callback.from_user.id))
+        )
+        
+        if not user2:
+            await callback.answer("Вы не зарегистрированы", show_alert=True)
+            return
+        
         pair.user2_id = user2.id
         user2.pair_id = pair.id
         await session.commit()
         
-        # Уведомляем обоих
         kb = InlineKeyboardMarkup(inline_keyboard=[
             [InlineKeyboardButton(text="📱 Открыть приложение", web_app=types.WebAppInfo(url="https://24pair.ru"))]
         ])
         
-        await message.answer(
+        await callback.message.edit_text(
             "🎉 Пара создана!\n\n"
             "Теперь вы можете пользоваться приложением.",
             reply_markup=kb
         )
         
-        # Уведомляем первого партнёра
         user1 = await session.get(User, pair.user1_id)
         try:
-            await message.bot.send_message(
+            await callback.bot.send_message(
                 user1.telegram_id,
                 "🎉 Ваш партнёр принял приглашение! Пара создана!",
                 reply_markup=kb
             )
         except:
             pass
+    
+    await callback.answer()
