@@ -86,6 +86,10 @@ async def accept_invite(message: types.Message, invite_token: str):
             await session.commit()
             await session.refresh(user2)
         
+        if user2.pair_id:
+            await message.answer("❌ Вы уже состоите в паре")
+            return
+        
         kb = InlineKeyboardMarkup(inline_keyboard=[
             [InlineKeyboardButton(text="✅ Принять приглашение", callback_data=f"accept_{invite_token}")]
         ])
@@ -119,6 +123,10 @@ async def process_accept(callback: types.CallbackQuery):
         
         if not user2:
             await callback.answer("Вы не зарегистрированы", show_alert=True)
+            return
+        
+        if user2.pair_id:
+            await callback.answer("Вы уже состоите в паре", show_alert=True)
             return
         
         pair.user2_id = user2.id
