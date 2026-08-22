@@ -132,6 +132,11 @@
         <button class="menu-button" onclick="alert('Настройки скоро появятся')">⚙️ Настройки</button>
     </div>
     
+    <div class="container" id="no-pair-container" style="display:none;">
+        <h1>💑 PairB</h1>
+        <p style="text-align:center; margin-bottom:24px; color:#666;">Сначала создайте пару через бота</p>
+    </div>
+    
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
         const tg = window.Telegram.WebApp;
@@ -150,7 +155,9 @@
                 const response = await fetch(`/api/check_onboarding/${telegram_id}`);
                 const data = await response.json();
                 
-                if (data.exists && data.onboarding_done) {
+                if (!data.exists) {
+                    document.getElementById('no-pair-container').style.display = 'block';
+                } else if (data.onboarding_done) {
                     document.getElementById('main-container').style.display = 'block';
                     document.getElementById('welcome-text').textContent = `Привет, ${data.name}!`;
                 } else {
