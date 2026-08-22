@@ -26,6 +26,9 @@ async def save_onboarding(data: OnboardingData):
         if not user:
             raise HTTPException(status_code=404, detail="User not found")
         
+        if not user.pair_id:
+            raise HTTPException(status_code=400, detail="No pair")
+        
         user.name = data.name
         user.gender = data.gender
         user.relationship_date = datetime.date.fromisoformat(data.relationship_date)
@@ -48,11 +51,22 @@ async def check_onboarding(telegram_id: int):
         if not user:
             return {"exists": False, "onboarding_done": False}
         
+        partner = None
+        if user.pair_id:
+            pair = await session.get(Pair, user.pair_id)
+            if pair:
+                if pair.user1_id == user.id:
+                    partner = await session.get(User, pair.user2_id) if pair.user2_id else None
+                else:
+                    partner = await session.get(User, pair.user1_id)
+        
         return {
             "exists": True,
             "onboarding_done": user.onboarding_done,
             "name": user.name,
-            "subscription_status": user.subscription_status
+            "subscription_status": user.subscription_status,
+            "pair_id": user.pair_id,
+            "partner_username": partner.username if partner else None
         }
 
 @router.get("/api/get_profile/{telegram_id}")
@@ -125,7 +139,6 @@ async def break_pair(telegram_id: int):
             user.subscription_status = "free"
             await session.commit()
             
-            # Отправляем уведомление второму юзеру
             if user2:
                 try:
                     from bot.handlers import bot

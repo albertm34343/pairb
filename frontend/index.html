@@ -40,6 +40,13 @@
             font-size: 24px;
         }
         
+        .partner-info {
+            text-align: center;
+            margin-bottom: 24px;
+            color: #666;
+            font-size: 14px;
+        }
+        
         .form-group {
             margin-bottom: 16px;
         }
@@ -102,6 +109,7 @@
 <body>
     <div class="container" id="onboarding-container" style="display:none;">
         <h1>💑 Добро пожаловать!</h1>
+        <p class="partner-info" id="onboarding-partner"></p>
         <p style="text-align:center; margin-bottom:24px; color:#666;">Заполните данные о себе</p>
         
         <div class="form-group">
@@ -143,6 +151,7 @@
     
     <div class="container" id="main-container" style="display:none;">
         <h1>💑 PairB</h1>
+        <p class="partner-info" id="main-partner"></p>
         <p style="text-align:center; margin-bottom:24px; color:#666;" id="welcome-text"></p>
         
         <button class="menu-button" onclick="showSettings()">⚙️ Настройки</button>
@@ -152,6 +161,7 @@
     <div class="container" id="settings-container" style="display:none;">
         <button class="back-button" onclick="showMain()">← Назад</button>
         <h1>⚙️ Настройки</h1>
+        <p class="partner-info" id="settings-partner"></p>
         
         <div class="form-group">
             <label>Имя</label>
@@ -219,12 +229,18 @@
                 
                 if (!data.exists) {
                     document.getElementById('no-pair-container').style.display = 'block';
+                } else if (!data.pair_id) {
+                    document.getElementById('no-pair-container').style.display = 'block';
                 } else if (data.onboarding_done) {
                     currentUser = data;
                     document.getElementById('main-container').style.display = 'block';
                     document.getElementById('welcome-text').textContent = `Привет, ${data.name}!`;
+                    const partnerText = data.partner_username ? `Ваш партнёр: @${data.partner_username}` : '';
+                    document.getElementById('main-partner').textContent = partnerText;
                 } else {
                     document.getElementById('onboarding-container').style.display = 'block';
+                    const partnerText = data.partner_username ? `Ваш партнёр: @${data.partner_username}` : '';
+                    document.getElementById('onboarding-partner').textContent = partnerText;
                 }
             } catch (e) {
                 alert('Ошибка загрузки');
@@ -259,6 +275,8 @@
                     document.getElementById('onboarding-container').style.display = 'none';
                     document.getElementById('main-container').style.display = 'block';
                     document.getElementById('welcome-text').textContent = `Привет, ${data.name}!`;
+                    const partnerText = currentUser.partner_username ? `Ваш партнёр: @${currentUser.partner_username}` : '';
+                    document.getElementById('main-partner').textContent = partnerText;
                 } else {
                     alert('Ошибка сохранения');
                 }
@@ -292,6 +310,8 @@
             document.getElementById('settings-container').style.display = 'none';
             document.getElementById('main-container').style.display = 'block';
             document.getElementById('welcome-text').textContent = `Привет, ${currentUser.name}!`;
+            const partnerText = currentUser.partner_username ? `Ваш партнёр: @${currentUser.partner_username}` : '';
+            document.getElementById('main-partner').textContent = partnerText;
         }
         
         async function saveSettings() {
