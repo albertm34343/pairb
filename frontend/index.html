@@ -64,6 +64,23 @@
             border: 1px solid #ddd;
             border-radius: 8px;
             font-size: 16px;
+            outline: none;
+            -webkit-appearance: none;
+            appearance: none;
+            background: white;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            border-color: #007aff;
+        }
+        
+        input::-webkit-contacts-auto-fill-button,
+        input::-webkit-credentials-auto-fill-button {
+            visibility: hidden;
+            display: none !important;
+            pointer-events: none;
+            position: absolute;
+            right: 0;
         }
         
         button {
@@ -138,7 +155,7 @@
         
         <div class="form-group">
             <label>Имя</label>
-            <input type="text" id="name" placeholder="Ваше имя">
+            <input type="text" id="name" placeholder="Ваше имя" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
         </div>
         
         <div class="form-group">
@@ -157,17 +174,17 @@
         
         <div class="form-group">
             <label>Город</label>
-            <input type="text" id="city" placeholder="Ваш город">
+            <input type="text" id="city" placeholder="Ваш город" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
         </div>
         
         <div class="form-group">
             <label>Личные увлечения</label>
-            <textarea id="personal_hobbies" rows="3" placeholder="Например: спорт, музыка, книги"></textarea>
+            <textarea id="personal_hobbies" rows="3" placeholder="Например: спорт, музыка, книги" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
         </div>
         
         <div class="form-group">
             <label>Совместные увлечения</label>
-            <textarea id="shared_hobbies" rows="3" placeholder="Например: путешествия, кино, готовка"></textarea>
+            <textarea id="shared_hobbies" rows="3" placeholder="Например: путешествия, кино, готовка" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
         </div>
         
         <button onclick="submitOnboarding()">Сохранить</button>
@@ -188,13 +205,13 @@
         <p class="partner-info" id="settings-partner"></p>
         
         <div class="settings-row">
-            <span class="settings-label">Статус подписки</span>
-            <span id="subscription-status" style="color:#666;">free</span>
+            <span class="settings-label">О себе</span>
+            <a class="edit-link" onclick="showEditProfile()">Редактировать</a>
         </div>
         
         <div class="settings-row">
-            <span class="settings-label">О себе</span>
-            <a class="edit-link" onclick="showEditProfile()">Редактировать</a>
+            <span class="settings-label">Полный доступ</span>
+            <a class="edit-link" onclick="alert('Оплата скоро появится')">Купить</a>
         </div>
         
         <div style="height: 24px;"></div>
@@ -208,7 +225,7 @@
         
         <div class="form-group">
             <label>Имя</label>
-            <input type="text" id="edit-name">
+            <input type="text" id="edit-name" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
         </div>
         
         <div class="form-group">
@@ -226,17 +243,17 @@
         
         <div class="form-group">
             <label>Город</label>
-            <input type="text" id="edit-city">
+            <input type="text" id="edit-city" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
         </div>
         
         <div class="form-group">
             <label>Личные увлечения</label>
-            <textarea id="edit-personal_hobbies" rows="3"></textarea>
+            <textarea id="edit-personal_hobbies" rows="3" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
         </div>
         
         <div class="form-group">
             <label>Совместные увлечения</label>
-            <textarea id="edit-shared_hobbies" rows="3"></textarea>
+            <textarea id="edit-shared_hobbies" rows="3" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
         </div>
         
         <button onclick="saveEditProfile()">Сохранить изменения</button>
@@ -364,7 +381,6 @@
                 const data = await response.json();
                 
                 currentUser = data;
-                document.getElementById('subscription-status').textContent = data.subscription_status || 'free';
                 const partnerText = data.partner_username ? `Ваш партнёр: @${data.partner_username}` : '';
                 document.getElementById('settings-partner').textContent = partnerText;
             } catch (e) {
