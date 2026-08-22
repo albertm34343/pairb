@@ -253,6 +253,7 @@
         tg.expand();
         
         let currentUser = null;
+        let pairCheckInterval = null;
         
         async function checkOnboarding() {
             const telegram_id = tg.initDataUnsafe?.user?.id;
@@ -267,23 +268,47 @@
                 const data = await response.json();
                 
                 if (!data.exists) {
-                    document.getElementById('no-pair-container').style.display = 'block';
+                    showNoPair();
                 } else if (!data.pair_id) {
-                    document.getElementById('no-pair-container').style.display = 'block';
+                    showNoPair();
                 } else if (data.onboarding_done) {
                     currentUser = data;
                     document.getElementById('main-container').style.display = 'block';
                     document.getElementById('welcome-text').textContent = `Привет, ${data.name}!`;
                     const partnerText = data.partner_username ? `Ваш партнёр: @${data.partner_username}` : '';
                     document.getElementById('main-partner').textContent = partnerText;
+                    startPairCheck();
                 } else {
                     document.getElementById('onboarding-container').style.display = 'block';
                     const partnerText = data.partner_username ? `Ваш партнёр: @${data.partner_username}` : '';
                     document.getElementById('onboarding-partner').textContent = partnerText;
+                    startPairCheck();
                 }
             } catch (e) {
                 alert('Ошибка загрузки');
             }
+        }
+        
+        function showNoPair() {
+            document.querySelectorAll('.container').forEach(c => c.style.display = 'none');
+            document.getElementById('no-pair-container').style.display = 'block';
+            if (pairCheckInterval) clearInterval(pairCheckInterval);
+        }
+        
+        function startPairCheck() {
+            if (pairCheckInterval) clearInterval(pairCheckInterval);
+            pairCheckInterval = setInterval(async () => {
+                const telegram_id = tg.initDataUnsafe?.user?.id;
+                try {
+                    const response = await fetch(`/api/check_onboarding/${telegram_id}`);
+                    const data = await response.json();
+                    if (!data.exists || !data.pair_id) {
+                        showNoPair();
+                    }
+                } catch (e) {
+                    // ignore
+                }
+            }, 3000);
         }
         
         async function submitOnboarding() {
