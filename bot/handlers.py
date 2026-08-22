@@ -31,7 +31,10 @@ async def start(message: types.Message):
             await session.refresh(user)
         
         if user.pair_id:
-            await message.answer("Вы уже в паре!")
+            kb = InlineKeyboardMarkup(inline_keyboard=[
+                [InlineKeyboardButton(text="📱 Открыть приложение", web_app=types.WebAppInfo(url="https://24pair.ru?v=2"))]
+            ])
+            await message.answer("Вы уже в паре!", reply_markup=kb)
             return
         
         invite_token = str(uuid.uuid4())
@@ -137,7 +140,7 @@ async def process_accept(callback: types.CallbackQuery):
         await session.commit()
         
         kb = InlineKeyboardMarkup(inline_keyboard=[
-            [InlineKeyboardButton(text="📱 Открыть приложение", web_app=types.WebAppInfo(url="https://24pair.ru"))]
+            [InlineKeyboardButton(text="📱 Открыть приложение", web_app=types.WebAppInfo(url="https://24pair.ru?v=2"))]
         ])
         
         await callback.message.edit_text(
