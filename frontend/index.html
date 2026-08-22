@@ -139,6 +139,8 @@
         
         async function checkOnboarding() {
             const telegram_id = tg.initDataUnsafe?.user?.id;
+            console.log('TELEGRAM_ID:', telegram_id);
+            console.log('INIT_DATA:', tg.initDataUnsafe);
             
             if (!telegram_id) {
                 alert('Ошибка: нет данных пользователя');
