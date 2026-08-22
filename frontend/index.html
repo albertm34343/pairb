@@ -337,6 +337,12 @@
             
             if (!data.name || !data.gender || !data.relationship_date || !data.city) {
                 alert('Заполните все поля');
+                setTimeout(() => {
+                    if (!data.name) document.getElementById('name').focus();
+                    else if (!data.gender) document.getElementById('gender').focus();
+                    else if (!data.relationship_date) document.getElementById('relationship_date').focus();
+                    else if (!data.city) document.getElementById('city').focus();
+                }, 100);
                 return;
             }
             
