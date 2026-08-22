@@ -255,6 +255,10 @@
         let currentUser = null;
         let pairCheckInterval = null;
         
+        function hideAll() {
+            document.querySelectorAll('.container').forEach(c => c.style.display = 'none');
+        }
+        
         async function checkOnboarding() {
             const telegram_id = tg.initDataUnsafe?.user?.id;
             
@@ -267,18 +271,18 @@
                 const response = await fetch(`/api/check_onboarding/${telegram_id}`);
                 const data = await response.json();
                 
-                if (!data.exists) {
-                    showNoPair();
-                } else if (!data.pair_id) {
+                if (!data.exists || !data.pair_id) {
                     showNoPair();
                 } else if (data.onboarding_done) {
                     currentUser = data;
+                    hideAll();
                     document.getElementById('main-container').style.display = 'block';
                     document.getElementById('welcome-text').textContent = `Привет, ${data.name}!`;
                     const partnerText = data.partner_username ? `Ваш партнёр: @${data.partner_username}` : '';
                     document.getElementById('main-partner').textContent = partnerText;
                     startPairCheck();
                 } else {
+                    hideAll();
                     document.getElementById('onboarding-container').style.display = 'block';
                     const partnerText = data.partner_username ? `Ваш партнёр: @${data.partner_username}` : '';
                     document.getElementById('onboarding-partner').textContent = partnerText;
@@ -290,7 +294,7 @@
         }
         
         function showNoPair() {
-            document.querySelectorAll('.container').forEach(c => c.style.display = 'none');
+            hideAll();
             document.getElementById('no-pair-container').style.display = 'block';
             if (pairCheckInterval) clearInterval(pairCheckInterval);
         }
@@ -336,7 +340,7 @@
                 
                 if (response.ok) {
                     currentUser = data;
-                    document.getElementById('onboarding-container').style.display = 'none';
+                    hideAll();
                     document.getElementById('main-container').style.display = 'block';
                     document.getElementById('welcome-text').textContent = `Привет, ${data.name}!`;
                     const partnerText = currentUser.partner_username ? `Ваш партнёр: @${currentUser.partner_username}` : '';
@@ -350,7 +354,7 @@
         }
         
         async function showSettings() {
-            document.getElementById('main-container').style.display = 'none';
+            hideAll();
             document.getElementById('settings-container').style.display = 'block';
             
             const telegram_id = tg.initDataUnsafe?.user?.id;
@@ -369,7 +373,7 @@
         }
         
         function showMain() {
-            document.getElementById('settings-container').style.display = 'none';
+            hideAll();
             document.getElementById('main-container').style.display = 'block';
             document.getElementById('welcome-text').textContent = `Привет, ${currentUser.name}!`;
             const partnerText = currentUser.partner_username ? `Ваш партнёр: @${currentUser.partner_username}` : '';
@@ -377,7 +381,7 @@
         }
         
         async function showEditProfile() {
-            document.getElementById('settings-container').style.display = 'none';
+            hideAll();
             document.getElementById('edit-profile-container').style.display = 'block';
             
             const telegram_id = tg.initDataUnsafe?.user?.id;
