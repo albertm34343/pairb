@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: pairb_db
+    restart: always
+    environment:
+      POSTGRES_USER: pairuser
+      POSTGRES_PASSWORD: pairpass_123
+      POSTGRES_DB: pairdb
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    networks:
+      - pairnet
+
+  app:
+    build: .
+    container_name: pairb_app
+    restart: always
+    depends_on:
+      - postgres
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    networks:
+      - pairnet
+
+volumes:
+  pg_data:
+
+networks:
+  pairnet:
