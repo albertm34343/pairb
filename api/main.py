@@ -1,23 +1,21 @@
-import asyncio
-import logging
-from aiogram import Dispatcher
-from core.bot import bot
-from core.db import engine
-from core.models import Base
-from bot.handlers import router
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from api.routes import router
 
-logging.basicConfig(level=logging.INFO)
+app = FastAPI(title="PairB API")
 
-dp = Dispatcher()
-dp.include_router(router)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-async def init_db():
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
+app.include_router(router)
 
-async def main():
-    await init_db()
-    await dp.start_polling(bot)
+app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")
 
-if __name__ == "__main__":
-    asyncio.run(main())
+@app.get("/health")
+async def health():
+    return {"status": "healthy"}
