@@ -137,9 +137,63 @@
         .edit-link:hover {
             text-decoration: underline;
         }
+        
+        .toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            z-index: 1000;
+            display: none;
+        }
+        
+        .confirm-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+        }
+        
+        .confirm-box {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            width: 90%;
+            max-width: 300px;
+            text-align: center;
+        }
+        
+        .confirm-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+        }
     </style>
 </head>
 <body>
+    <div class="toast" id="toast"></div>
+    
+    <div class="confirm-overlay" id="confirm-overlay">
+        <div class="confirm-box">
+            <p id="confirm-text" style="margin-bottom:16px;"></p>
+            <div class="confirm-buttons">
+                <button onclick="confirmAction(false)">Отмена</button>
+                <button class="danger-button" onclick="confirmAction(true)">Да</button>
+            </div>
+        </div>
+    </div>
+    
     <div class="container" id="onboarding-container" style="display:none;">
         <h1>💑 Добро пожаловать!</h1>
         <p class="partner-info" id="onboarding-partner"></p>
@@ -188,7 +242,7 @@
         <p style="text-align:center; margin-bottom:24px; color:#666;" id="welcome-text"></p>
         
         <button class="menu-button" onclick="showSettings()">⚙️ Настройки</button>
-        <button class="menu-button" onclick="alert('Интерактив скоро появится')">🎮 Интерактив</button>
+        <button class="menu-button" onclick="showToast('Интерактив скоро появится')">🎮 Интерактив</button>
     </div>
     
     <div class="container" id="settings-container" style="display:none;">
@@ -203,7 +257,7 @@
         
         <div class="settings-row">
             <span class="settings-label">Полный доступ</span>
-            <a class="edit-link" onclick="alert('Оплата скоро появится')">Купить</a>
+            <a class="edit-link" onclick="showToast('Оплата скоро появится')">Купить</a>
         </div>
         
         <div style="height: 24px;"></div>
@@ -263,6 +317,28 @@
         
         let currentUser = null;
         let pairCheckInterval = null;
+        let confirmCallback = null;
+        
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.style.display = 'block';
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 2000);
+        }
+        
+        function showConfirm(message, callback) {
+            document.getElementById('confirm-text').textContent = message;
+            document.getElementById('confirm-overlay').style.display = 'flex';
+            confirmCallback = callback;
+        }
+        
+        function confirmAction(result) {
+            document.getElementById('confirm-overlay').style.display = 'none';
+            if (confirmCallback) confirmCallback(result);
+            confirmCallback = null;
+        }
         
         function hideAll() {
             document.querySelectorAll('.container').forEach(c => c.style.display = 'none');
@@ -272,7 +348,7 @@
             const telegram_id = tg.initDataUnsafe?.user?.id;
             
             if (!telegram_id) {
-                alert('Ошибка: нет данных пользователя');
+                showToast('Ошибка: нет данных пользователя');
                 return;
             }
             
@@ -298,7 +374,7 @@
                     startPairCheck();
                 }
             } catch (e) {
-                alert('Ошибка загрузки');
+                showToast('Ошибка загрузки');
             }
         }
         
@@ -336,13 +412,7 @@
             };
             
             if (!data.name || !data.gender || !data.relationship_date || !data.city) {
-                alert('Заполните все поля');
-                setTimeout(() => {
-                    if (!data.name) document.getElementById('name').focus();
-                    else if (!data.gender) document.getElementById('gender').focus();
-                    else if (!data.relationship_date) document.getElementById('relationship_date').focus();
-                    else if (!data.city) document.getElementById('city').focus();
-                }, 100);
+                showToast('Заполните все поля');
                 return;
             }
             
@@ -361,10 +431,10 @@
                     const partnerText = currentUser.partner_username ? `Ваш партнёр: @${currentUser.partner_username}` : '';
                     document.getElementById('main-partner').textContent = partnerText;
                 } else {
-                    alert('Ошибка сохранения');
+                    showToast('Ошибка сохранения');
                 }
             } catch (e) {
-                alert('Ошибка сети');
+                showToast('Ошибка сети');
             }
         }
         
@@ -382,7 +452,7 @@
                 const partnerText = data.partner_username ? `Ваш партнёр: @${data.partner_username}` : '';
                 document.getElementById('settings-partner').textContent = partnerText;
             } catch (e) {
-                alert('Ошибка загрузки настроек');
+                showToast('Ошибка загрузки настроек');
             }
         }
         
@@ -411,7 +481,7 @@
                 document.getElementById('edit-personal_hobbies').value = data.personal_hobbies || '';
                 document.getElementById('edit-shared_hobbies').value = data.shared_hobbies || '';
             } catch (e) {
-                alert('Ошибка загрузки профиля');
+                showToast('Ошибка загрузки профиля');
             }
         }
         
@@ -434,36 +504,38 @@
                 });
                 
                 if (response.ok) {
-                    alert('Данные обновлены!');
+                    showToast('Данные обновлены!');
                     currentUser.name = data.name;
                     showSettings();
                 } else {
-                    alert('Ошибка сохранения');
+                    showToast('Ошибка сохранения');
                 }
             } catch (e) {
-                alert('Ошибка сети');
+                showToast('Ошибка сети');
             }
         }
         
         async function breakPair() {
-            if (!confirm('Вы уверены, что хотите разорвать пару?')) return;
-            
-            const telegram_id = tg.initDataUnsafe?.user?.id;
-            
-            try {
-                const response = await fetch(`/api/break_pair/${telegram_id}`, {
-                    method: 'POST'
-                });
+            showConfirm('Вы уверены, что хотите разорвать пару?', async (result) => {
+                if (!result) return;
                 
-                if (response.ok) {
-                    alert('Пара разорвана');
-                    tg.close();
-                } else {
-                    alert('Ошибка');
+                const telegram_id = tg.initDataUnsafe?.user?.id;
+                
+                try {
+                    const response = await fetch(`/api/break_pair/${telegram_id}`, {
+                        method: 'POST'
+                    });
+                    
+                    if (response.ok) {
+                        showToast('Пара разорвана');
+                        setTimeout(() => tg.close(), 1000);
+                    } else {
+                        showToast('Ошибка');
+                    }
+                } catch (e) {
+                    showToast('Ошибка сети');
                 }
-            } catch (e) {
-                alert('Ошибка сети');
-            }
+            });
         }
         
         checkOnboarding();
