@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from core.db import async_session
 from core.models import User, Pair
+from core.bot import bot
 from sqlalchemy import select
 import datetime
 
@@ -119,6 +120,8 @@ async def break_pair(telegram_id: int):
         if not user:
             raise HTTPException(status_code=404, detail="User not found")
         
+        user2 = None
+        
         if user.pair_id:
             pair = await session.get(Pair, user.pair_id)
             if pair:
@@ -141,12 +144,11 @@ async def break_pair(telegram_id: int):
             
             if user2:
                 try:
-                    from bot.handlers import bot
                     await bot.send_message(
                         user2.telegram_id,
                         "💔 Ваш партнёр разорвал пару."
                     )
-                except:
+                except Exception as e:
                     pass
         
         return {"status": "ok"}
