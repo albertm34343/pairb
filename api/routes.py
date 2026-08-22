@@ -37,3 +37,19 @@ async def save_onboarding(data: OnboardingData):
         await session.commit()
         
         return {"status": "ok"}
+
+@router.get("/api/check_onboarding/{telegram_id}")
+async def check_onboarding(telegram_id: int):
+    async with async_session() as session:
+        user = await session.scalar(
+            select(User).where(User.telegram_id == str(telegram_id))
+        )
+        
+        if not user:
+            return {"exists": False, "onboarding_done": False}
+        
+        return {
+            "exists": True,
+            "onboarding_done": user.onboarding_done,
+            "name": user.name
+        }

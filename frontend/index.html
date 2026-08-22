@@ -70,10 +70,20 @@
         button:hover {
             background: #0066cc;
         }
+        
+        .menu-button {
+            margin-bottom: 12px;
+            background: #f0f0f0;
+            color: #333;
+        }
+        
+        .menu-button:hover {
+            background: #e0e0e0;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="container" id="onboarding-container" style="display:none;">
         <h1>💑 Добро пожаловать!</h1>
         <p style="text-align:center; margin-bottom:24px; color:#666;">Заполните данные о себе</p>
         
@@ -114,10 +124,41 @@
         <button onclick="submitOnboarding()">Сохранить</button>
     </div>
     
+    <div class="container" id="main-container" style="display:none;">
+        <h1>💑 PairB</h1>
+        <p style="text-align:center; margin-bottom:24px; color:#666;" id="welcome-text"></p>
+        
+        <button class="menu-button" onclick="alert('Интерактив скоро появится')">🎮 Интерактив</button>
+        <button class="menu-button" onclick="alert('Настройки скоро появятся')">⚙️ Настройки</button>
+    </div>
+    
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
         const tg = window.Telegram.WebApp;
         tg.expand();
+        
+        async function checkOnboarding() {
+            const telegram_id = tg.initDataUnsafe?.user?.id;
+            
+            if (!telegram_id) {
+                alert('Ошибка: нет данных пользователя');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`/api/check_onboarding/${telegram_id}`);
+                const data = await response.json();
+                
+                if (data.exists && data.onboarding_done) {
+                    document.getElementById('main-container').style.display = 'block';
+                    document.getElementById('welcome-text').textContent = `Привет, ${data.name}!`;
+                } else {
+                    document.getElementById('onboarding-container').style.display = 'block';
+                }
+            } catch (e) {
+                alert('Ошибка загрузки');
+            }
+        }
         
         async function submitOnboarding() {
             const data = {
@@ -144,7 +185,7 @@
                 
                 if (response.ok) {
                     alert('Данные сохранены!');
-                    tg.close();
+                    checkOnboarding();
                 } else {
                     alert('Ошибка сохранения');
                 }
@@ -152,6 +193,8 @@
                 alert('Ошибка сети');
             }
         }
+        
+        checkOnboarding();
     </script>
 </body>
 </html>
