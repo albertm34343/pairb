@@ -51,7 +51,8 @@ async def check_onboarding(telegram_id: int):
         return {
             "exists": True,
             "onboarding_done": user.onboarding_done,
-            "name": user.name
+            "name": user.name,
+            "subscription_status": user.subscription_status
         }
 
 @router.get("/api/get_profile/{telegram_id}")
@@ -114,10 +115,25 @@ async def break_pair(telegram_id: int):
                 
                 if user2:
                     user2.pair_id = None
+                    user2.onboarding_done = False
+                    user2.subscription_status = "free"
                 
                 await session.delete(pair)
             
             user.pair_id = None
+            user.onboarding_done = False
+            user.subscription_status = "free"
             await session.commit()
+            
+            # Отправляем уведомление второму юзеру
+            if user2:
+                try:
+                    from bot.handlers import bot
+                    await bot.send_message(
+                        user2.telegram_id,
+                        "💔 Ваш партнёр разорвал пару."
+                    )
+                except:
+                    pass
         
         return {"status": "ok"}
