@@ -104,6 +104,30 @@
         .danger-button:hover {
             background: #cc2d24;
         }
+        
+        .settings-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .settings-label {
+            font-size: 16px;
+            color: #333;
+        }
+        
+        .edit-link {
+            color: #007aff;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        
+        .edit-link:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -163,14 +187,33 @@
         <h1>⚙️ Настройки</h1>
         <p class="partner-info" id="settings-partner"></p>
         
+        <div class="settings-row">
+            <span class="settings-label">Статус подписки</span>
+            <span id="subscription-status" style="color:#666;">free</span>
+        </div>
+        
+        <div class="settings-row">
+            <span class="settings-label">О себе</span>
+            <a class="edit-link" onclick="showEditProfile()">Редактировать</a>
+        </div>
+        
+        <div style="height: 24px;"></div>
+        
+        <button class="danger-button" onclick="breakPair()">💔 Разорвать пару</button>
+    </div>
+    
+    <div class="container" id="edit-profile-container" style="display:none;">
+        <button class="back-button" onclick="showSettings()">← Назад</button>
+        <h1>✏️ О себе</h1>
+        
         <div class="form-group">
             <label>Имя</label>
-            <input type="text" id="settings-name">
+            <input type="text" id="edit-name">
         </div>
         
         <div class="form-group">
             <label>Пол</label>
-            <select id="settings-gender">
+            <select id="edit-gender">
                 <option value="male">Мужской</option>
                 <option value="female">Женский</option>
             </select>
@@ -178,29 +221,25 @@
         
         <div class="form-group">
             <label>Дата начала отношений</label>
-            <input type="date" id="settings-relationship_date">
+            <input type="date" id="edit-relationship_date">
         </div>
         
         <div class="form-group">
             <label>Город</label>
-            <input type="text" id="settings-city">
+            <input type="text" id="edit-city">
         </div>
         
         <div class="form-group">
             <label>Личные увлечения</label>
-            <textarea id="settings-personal_hobbies" rows="3"></textarea>
+            <textarea id="edit-personal_hobbies" rows="3"></textarea>
         </div>
         
         <div class="form-group">
             <label>Совместные увлечения</label>
-            <textarea id="settings-shared_hobbies" rows="3"></textarea>
+            <textarea id="edit-shared_hobbies" rows="3"></textarea>
         </div>
         
-        <button onclick="saveSettings()">Сохранить изменения</button>
-        
-        <div style="height: 24px;"></div>
-        
-        <button class="danger-button" onclick="breakPair()">💔 Разорвать пару</button>
+        <button onclick="saveEditProfile()">Сохранить изменения</button>
     </div>
     
     <div class="container" id="no-pair-container" style="display:none;">
@@ -292,17 +331,15 @@
             const telegram_id = tg.initDataUnsafe?.user?.id;
             
             try {
-                const response = await fetch(`/api/get_profile/${telegram_id}`);
+                const response = await fetch(`/api/check_onboarding/${telegram_id}`);
                 const data = await response.json();
                 
-                document.getElementById('settings-name').value = data.name || '';
-                document.getElementById('settings-gender').value = data.gender || 'male';
-                document.getElementById('settings-relationship_date').value = data.relationship_date || '';
-                document.getElementById('settings-city').value = data.city || '';
-                document.getElementById('settings-personal_hobbies').value = data.personal_hobbies || '';
-                document.getElementById('settings-shared_hobbies').value = data.shared_hobbies || '';
+                currentUser = data;
+                document.getElementById('subscription-status').textContent = data.subscription_status || 'free';
+                const partnerText = data.partner_username ? `Ваш партнёр: @${data.partner_username}` : '';
+                document.getElementById('settings-partner').textContent = partnerText;
             } catch (e) {
-                alert('Ошибка загрузки профиля');
+                alert('Ошибка загрузки настроек');
             }
         }
         
@@ -314,15 +351,36 @@
             document.getElementById('main-partner').textContent = partnerText;
         }
         
-        async function saveSettings() {
+        async function showEditProfile() {
+            document.getElementById('settings-container').style.display = 'none';
+            document.getElementById('edit-profile-container').style.display = 'block';
+            
+            const telegram_id = tg.initDataUnsafe?.user?.id;
+            
+            try {
+                const response = await fetch(`/api/get_profile/${telegram_id}`);
+                const data = await response.json();
+                
+                document.getElementById('edit-name').value = data.name || '';
+                document.getElementById('edit-gender').value = data.gender || 'male';
+                document.getElementById('edit-relationship_date').value = data.relationship_date || '';
+                document.getElementById('edit-city').value = data.city || '';
+                document.getElementById('edit-personal_hobbies').value = data.personal_hobbies || '';
+                document.getElementById('edit-shared_hobbies').value = data.shared_hobbies || '';
+            } catch (e) {
+                alert('Ошибка загрузки профиля');
+            }
+        }
+        
+        async function saveEditProfile() {
             const data = {
                 telegram_id: tg.initDataUnsafe?.user?.id,
-                name: document.getElementById('settings-name').value,
-                gender: document.getElementById('settings-gender').value,
-                relationship_date: document.getElementById('settings-relationship_date').value,
-                city: document.getElementById('settings-city').value,
-                personal_hobbies: document.getElementById('settings-personal_hobbies').value,
-                shared_hobbies: document.getElementById('settings-shared_hobbies').value
+                name: document.getElementById('edit-name').value,
+                gender: document.getElementById('edit-gender').value,
+                relationship_date: document.getElementById('edit-relationship_date').value,
+                city: document.getElementById('edit-city').value,
+                personal_hobbies: document.getElementById('edit-personal_hobbies').value,
+                shared_hobbies: document.getElementById('edit-shared_hobbies').value
             };
             
             try {
@@ -335,7 +393,7 @@
                 if (response.ok) {
                     alert('Данные обновлены!');
                     currentUser.name = data.name;
-                    showMain();
+                    showSettings();
                 } else {
                     alert('Ошибка сохранения');
                 }
