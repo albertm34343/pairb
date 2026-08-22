@@ -185,8 +185,9 @@
                 });
                 
                 if (response.ok) {
-                    alert('Данные сохранены!');
-                    checkOnboarding();
+                    document.getElementById('onboarding-container').style.display = 'none';
+                    document.getElementById('main-container').style.display = 'block';
+                    document.getElementById('welcome-text').textContent = `Привет, ${data.name}!`;
                 } else {
                     alert('Ошибка сохранения');
                 }
