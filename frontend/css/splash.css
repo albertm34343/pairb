@@ -68,13 +68,4 @@ canvas {
     z-index: 2000;
     overflow: hidden;
     background: #ffffff;
-    animation: splashFade 0.8s ease forwards;
-    animation-delay: 3.5s;
-}
-
-@keyframes splashFade {
-    to {
-        opacity: 0;
-        visibility: hidden;
-    }
 }
