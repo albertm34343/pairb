@@ -26,7 +26,6 @@ async function loadScreens() {
         }
     }
     
-    // После загрузки сплэша — инициализируем анимацию
     initSplash();
 }
 
@@ -258,7 +257,9 @@ function showOnboarding(data) {
 
 async function init() {
     await loadScreens();
-    checkOnboarding();
+    setTimeout(() => {
+        checkOnboarding();
+    }, 3000);
 }
 
 init();
