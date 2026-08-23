@@ -6,7 +6,8 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>PairB</title>
+    <title>Knot</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -15,8 +16,8 @@
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: #f5f5f5;
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: #f5f5f7;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -25,140 +26,249 @@
             padding: 20px;
         }
         
+        /* Splash Screen */
+        .splash {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #0d0d0f;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            animation: splashFade 0.8s ease forwards;
+            animation-delay: 2.4s;
+        }
+        
+        .splash-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 64px;
+            font-weight: 500;
+            color: white;
+            letter-spacing: 2px;
+            opacity: 0;
+            animation: titleAppear 1.2s ease forwards;
+        }
+        
+        @keyframes titleAppear {
+            0% {
+                opacity: 0;
+                transform: scale(0.95);
+                letter-spacing: 8px;
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1);
+                letter-spacing: 2px;
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+                letter-spacing: 2px;
+            }
+        }
+        
+        @keyframes splashFade {
+            to {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+        
+        /* Containers */
         .container {
-            background: white;
-            border-radius: 16px;
-            padding: 32px;
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 32px 24px;
             width: 100%;
             max-width: 400px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+            border: 1px solid rgba(255,255,255,0.4);
         }
         
         h1 {
             text-align: center;
             margin-bottom: 24px;
-            font-size: 24px;
+            font-size: 28px;
+            font-weight: 300;
+            font-family: 'Cormorant Garamond', serif;
+            color: #1a1a1e;
         }
         
         .partner-info {
             text-align: center;
             margin-bottom: 24px;
-            color: #666;
-            font-size: 14px;
+            color: #8e8e93;
+            font-size: 13px;
+            font-weight: 400;
         }
         
+        /* Form Elements */
         .form-group {
-            margin-bottom: 16px;
+            margin-bottom: 14px;
         }
         
         label {
             display: block;
-            margin-bottom: 8px;
-            font-size: 14px;
-            color: #333;
+            margin-bottom: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            color: #6e6e73;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         
         input, select, textarea {
             width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 16px;
+            padding: 14px 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
             outline: none;
             -webkit-appearance: none;
             appearance: none;
-            background: white;
+            background: rgba(255, 255, 255, 0.55);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             caret-color: #007aff;
+            color: #1a1a1e;
+            font-family: 'Inter', sans-serif;
+            font-weight: 400;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
         }
         
         input:focus, select:focus, textarea:focus {
-            border-color: #007aff;
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.12);
         }
         
-        button {
-            width: 100%;
-            padding: 14px;
-            background: #007aff;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
+        textarea {
+            resize: none;
+        }
+        
+        select {
             cursor: pointer;
         }
         
+        /* Buttons */
+        button {
+            width: 100%;
+            padding: 16px;
+            background: #0d0d0f;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.2s ease;
+            letter-spacing: 0.3px;
+        }
+        
         button:hover {
-            background: #0066cc;
+            background: #1c1c20;
+            transform: translateY(-1px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+        
+        button:active {
+            transform: translateY(0);
+            box-shadow: none;
         }
         
         .menu-button {
-            margin-bottom: 12px;
-            background: #f0f0f0;
-            color: #333;
+            margin-bottom: 10px;
+            background: rgba(255, 255, 255, 0.55);
+            backdrop-filter: blur(10px);
+            color: #1a1a1e;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
         }
         
         .menu-button:hover {
-            background: #e0e0e0;
+            background: rgba(255, 255, 255, 0.75);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
         }
         
         .back-button {
-            background: #f0f0f0;
-            color: #333;
+            background: rgba(255, 255, 255, 0.55);
+            backdrop-filter: blur(10px);
+            color: #1a1a1e;
             margin-bottom: 16px;
+            text-align: left;
+            padding: 12px 16px;
+            font-size: 14px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
         }
         
         .danger-button {
-            background: #ff3b30;
+            background: rgba(255, 59, 48, 0.85);
+            backdrop-filter: blur(10px);
         }
         
         .danger-button:hover {
-            background: #cc2d24;
+            background: rgba(255, 59, 48, 1);
         }
         
+        /* Settings */
         .settings-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 16px 0;
-            border-bottom: 1px solid #eee;
+            padding: 14px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.06);
         }
         
         .settings-label {
-            font-size: 16px;
-            color: #333;
+            font-size: 14px;
+            font-weight: 500;
+            color: #1a1a1e;
         }
         
         .edit-link {
             color: #007aff;
-            font-size: 14px;
+            font-size: 13px;
+            font-weight: 500;
             cursor: pointer;
             text-decoration: none;
+            transition: opacity 0.2s;
         }
         
         .edit-link:hover {
-            text-decoration: underline;
+            opacity: 0.7;
         }
         
+        /* Toast */
         .toast {
             position: fixed;
             top: 20px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.75);
+            backdrop-filter: blur(10px);
             color: white;
             padding: 12px 24px;
-            border-radius: 8px;
-            font-size: 14px;
+            border-radius: 100px;
+            font-size: 13px;
+            font-weight: 400;
             z-index: 1000;
             display: none;
         }
         
+        /* Confirm */
         .confirm-overlay {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(5px);
             display: none;
             align-items: center;
             justify-content: center;
@@ -166,8 +276,9 @@
         }
         
         .confirm-box {
-            background: white;
-            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
             padding: 24px;
             width: 90%;
             max-width: 300px;
@@ -176,17 +287,21 @@
         
         .confirm-buttons {
             display: flex;
-            gap: 12px;
+            gap: 10px;
             margin-top: 16px;
         }
     </style>
 </head>
 <body>
+    <div class="splash" id="splash">
+        <div class="splash-title">Knot</div>
+    </div>
+    
     <div class="toast" id="toast"></div>
     
     <div class="confirm-overlay" id="confirm-overlay">
         <div class="confirm-box">
-            <p id="confirm-text" style="margin-bottom:16px;"></p>
+            <p id="confirm-text" style="margin-bottom:16px; font-size:14px; color:#1a1a1e;"></p>
             <div class="confirm-buttons">
                 <button onclick="confirmAction(false)">Отмена</button>
                 <button class="danger-button" onclick="confirmAction(true)">Да</button>
@@ -195,9 +310,9 @@
     </div>
     
     <div class="container" id="onboarding-container" style="display:none;">
-        <h1>💑 Добро пожаловать!</h1>
+        <h1>Knot</h1>
         <p class="partner-info" id="onboarding-partner"></p>
-        <p style="text-align:center; margin-bottom:24px; color:#666;">Заполните данные о себе</p>
+        <p style="text-align:center; margin-bottom:24px; color:#8e8e93; font-size:13px;">Заполните данные о себе</p>
         
         <div class="form-group">
             <label>Имя</label>
@@ -237,9 +352,9 @@
     </div>
     
     <div class="container" id="main-container" style="display:none;">
-        <h1>💑 PairB</h1>
+        <h1>Knot</h1>
         <p class="partner-info" id="main-partner"></p>
-        <p style="text-align:center; margin-bottom:24px; color:#666;" id="welcome-text"></p>
+        <p style="text-align:center; margin-bottom:24px; color:#8e8e93; font-size:13px;" id="welcome-text"></p>
         
         <button class="menu-button" onclick="showSettings()">⚙️ Настройки</button>
         <button class="menu-button" onclick="showToast('Интерактив скоро появится')">🎮 Интерактив</button>
@@ -247,7 +362,7 @@
     
     <div class="container" id="settings-container" style="display:none;">
         <button class="back-button" onclick="showMain()">← Назад</button>
-        <h1>⚙️ Настройки</h1>
+        <h1>Knot</h1>
         <p class="partner-info" id="settings-partner"></p>
         
         <div class="settings-row">
@@ -267,7 +382,7 @@
     
     <div class="container" id="edit-profile-container" style="display:none;">
         <button class="back-button" onclick="showSettings()">← Назад</button>
-        <h1>✏️ О себе</h1>
+        <h1>Knot</h1>
         
         <div class="form-group">
             <label>Имя</label>
@@ -306,8 +421,8 @@
     </div>
     
     <div class="container" id="no-pair-container" style="display:none;">
-        <h1>💑 PairB</h1>
-        <p style="text-align:center; margin-bottom:24px; color:#666;">Сначала создайте пару через бота</p>
+        <h1>Knot</h1>
+        <p style="text-align:center; margin-bottom:24px; color:#8e8e93; font-size:13px;">Сначала создайте пару через бота</p>
     </div>
     
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
