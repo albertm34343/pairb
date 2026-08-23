@@ -23,11 +23,7 @@ async function submitOnboarding() {
         
         if (response.ok) {
             currentUser = data;
-            hideAll();
-            document.getElementById('main-container').style.display = 'block';
-            document.getElementById('welcome-text').textContent = `Привет, ${data.name}!`;
-            const partnerText = currentUser.partner_username ? `Ваш партнёр: @${currentUser.partner_username}` : '';
-            document.getElementById('main-partner').textContent = partnerText;
+            showMain();
         } else {
             showToast('Ошибка сохранения');
         }

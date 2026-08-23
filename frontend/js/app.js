@@ -5,7 +5,6 @@ let currentUser = null;
 let pairCheckInterval = null;
 let confirmCallback = null;
 
-// Загрузка экранов
 async function loadScreens() {
     const screens = {
         'splash-screen': 'screens/splash.html',
@@ -13,6 +12,7 @@ async function loadScreens() {
         'main-screen': 'screens/main.html',
         'interactive-screen': 'screens/interactive.html',
         'settings-screen': 'screens/settings.html',
+        'edit-profile-screen': 'screens/onboarding.html',
         'payment-screen': 'screens/payment.html'
     };
     
@@ -112,7 +112,6 @@ function showOnboarding(data) {
     document.getElementById('onboarding-partner').textContent = partnerText;
 }
 
-// Инициализация
 async function init() {
     await loadScreens();
     checkOnboarding();
