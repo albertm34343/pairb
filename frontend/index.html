@@ -69,10 +69,8 @@
     </style>
 </head>
 <body>
-    <!-- Toast -->
     <div class="toast" id="toast"></div>
     
-    <!-- Confirm -->
     <div class="confirm-overlay" id="confirm-overlay">
         <div class="confirm-box">
             <p id="confirm-text" style="margin-bottom:16px;"></p>
@@ -83,7 +81,6 @@
         </div>
     </div>
     
-    <!-- Screens -->
     <div id="splash-screen" class="screen"></div>
     <div id="no-pair-screen" class="screen" style="display:none;">
         <div style="text-align:center; color:#666; font-size:16px;">Сначала создайте пару через бота</div>
@@ -96,14 +93,7 @@
     <div id="payment-screen" class="screen" style="display:none;"></div>
     
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script type="importmap">
-        {
-            "imports": {
-                "three": "https://unpkg.com/three@0.128.0/build/three.module.js"
-            }
-        }
-    </script>
-    <script type="module" src="js/splash.js"></script>
+    <script src="js/splash.js"></script>
     <script src="js/app.js"></script>
     <script src="js/main.js"></script>
     <script src="js/onboarding.js"></script>

@@ -1,162 +1,128 @@
-import * as THREE from 'three';
+const canvas = document.getElementById('liquidCanvas');
+const ctx = canvas.getContext('2d');
+let width = canvas.width = window.innerWidth;
+let height = canvas.height = window.innerHeight;
 
-const canvas = document.getElementById('gas-webgl');
-const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true, premultipliedAlpha: false });
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setClearColor(0xffffff, 1);
-
-const scene = new THREE.Scene();
-scene.background = new THREE.Color(0xffffff);
-
-const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
-camera.position.z = 1;
-
-const GAS_COUNT = 1000;
-const PINK_COLOR = new THREE.Color(0xff5da2);
-const BLUE_COLOR = new THREE.Color(0x4d8bff);
-const MIX_COLOR = new THREE.Color(0xb182ff);
-
-const positions = new Float32Array(GAS_COUNT * 3);
-const colors = new Float32Array(GAS_COUNT * 3);
-const sizes = new Float32Array(GAS_COUNT);
-const velocities = new Float32Array(GAS_COUNT * 3);
-
-const halfCount = GAS_COUNT / 2;
-
-for (let i = 0; i < GAS_COUNT; i++) {
-    const isPink = i < halfCount;
-    const index = i * 3;
-    
-    const angle = Math.random() * Math.PI * 2;
-    const radius = 0.15 + Math.random() * 0.4;
-    
-    positions[index] = Math.cos(angle) * radius;
-    positions[index + 1] = Math.sin(angle) * radius;
-    positions[index + 2] = 0;
-    
-    if (isPink) {
-        colors[index] = PINK_COLOR.r;
-        colors[index + 1] = PINK_COLOR.g;
-        colors[index + 2] = PINK_COLOR.b;
-    } else {
-        colors[index] = BLUE_COLOR.r;
-        colors[index + 1] = BLUE_COLOR.g;
-        colors[index + 2] = BLUE_COLOR.b;
+class Particle {
+    constructor(color, side) {
+        this.reset(color, side);
     }
-    
-    sizes[i] = 0.15 + Math.random() * 0.25;
-    
-    velocities[index] = (Math.random() - 0.5) * 0.05;
-    velocities[index + 1] = (Math.random() - 0.5) * 0.05;
-    velocities[index + 2] = 0;
-}
 
-const geometry = new THREE.BufferGeometry();
-geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-geometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
-
-const vertexShader = `
-    attribute float size;
-    attribute vec3 color;
-    varying vec3 vColor;
-    void main() {
-        vColor = color;
-        vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-        gl_PointSize = size * (250.0 / -mvPosition.z) * 2.5;
-        gl_Position = projectionMatrix * mvPosition;
+    reset(color, side) {
+        this.color = color;
+        this.side = side;
+        this.x = side === 'left' ? -Math.random() * 100 : width + Math.random() * 100;
+        this.y = Math.random() * height;
+        this.size = Math.random() * 120 + 60;
+        this.speedX = side === 'left' ? Math.random() * 2 + 1 : -(Math.random() * 2 + 1);
+        this.speedY = Math.random() * 0.5 - 0.25;
+        this.opacity = 0;
+        this.targetOpacity = Math.random() * 0.4 + 0.3;
+        this.blur = Math.random() * 40 + 20;
+        this.wobble = Math.random() * Math.PI * 2;
+        this.wobbleSpeed = Math.random() * 0.02 + 0.01;
+        this.wobbleAmount = Math.random() * 30 + 10;
+        this.centerX = width / 2;
     }
-`;
 
-const fragmentShader = `
-    varying vec3 vColor;
-    void main() {
-        vec2 cxy = 2.0 * gl_PointCoord - 1.0;
-        float r = dot(cxy, cxy);
-        if (r > 1.0) discard;
-        float alpha = (1.0 - r) * 0.8;
-        alpha = pow(alpha, 1.8);
-        gl_FragColor = vec4(vColor, alpha);
-    }
-`;
+    update() {
+        this.wobble += this.wobbleSpeed;
+        this.x += this.speedX;
+        this.y += this.speedY + Math.sin(this.wobble) * this.wobbleAmount * 0.1;
 
-const material = new THREE.ShaderMaterial({
-    vertexShader: vertexShader,
-    fragmentShader: fragmentShader,
-    transparent: true,
-    depthWrite: false,
-    blending: THREE.MultiplyBlending,
-});
-
-const particles = new THREE.Points(geometry, material);
-scene.add(particles);
-
-let startTime = performance.now();
-
-function updateGas(timestamp) {
-    const elapsed = timestamp - startTime;
-    
-    const posAttr = geometry.attributes.position;
-    const colAttr = geometry.attributes.color;
-    const posArray = posAttr.array;
-    const colArray = colAttr.array;
-    
-    for (let i = 0; i < GAS_COUNT; i++) {
-        const idx = i * 3;
-        const isPink = i < halfCount;
-        
-        velocities[idx] += (Math.random() - 0.5) * 0.02;
-        velocities[idx + 1] += (Math.random() - 0.5) * 0.02;
-        
-        const speed = Math.sqrt(velocities[idx]*velocities[idx] + velocities[idx+1]*velocities[idx+1]);
-        if (speed > 0.15) {
-            velocities[idx] = (velocities[idx] / speed) * 0.15;
-            velocities[idx + 1] = (velocities[idx + 1] / speed) * 0.15;
+        const distToCenter = Math.abs(this.x - this.centerX);
+        if (distToCenter < 200) {
+            this.speedX *= 0.98;
         }
-        
-        const centerX = 0.0;
-        const centerY = 0.0;
-        const dx = centerX - posArray[idx];
-        const dy = centerY - posArray[idx + 1];
-        velocities[idx] += dx * 0.003;
-        velocities[idx + 1] += dy * 0.003;
-        
-        const mixFactor = 0.5 + Math.sin(elapsed * 0.0003) * 0.2;
-        if (isPink) {
-            const targetColor = MIX_COLOR.clone().lerp(PINK_COLOR, 0.6);
-            colArray[idx] = PINK_COLOR.r + (targetColor.r - PINK_COLOR.r) * mixFactor;
-            colArray[idx + 1] = PINK_COLOR.g + (targetColor.g - PINK_COLOR.g) * mixFactor;
-            colArray[idx + 2] = PINK_COLOR.b + (targetColor.b - PINK_COLOR.b) * mixFactor;
+
+        if (distToCenter < 150) {
+            this.opacity *= 0.97;
+            this.size *= 0.995;
         } else {
-            const targetColor = MIX_COLOR.clone().lerp(BLUE_COLOR, 0.4);
-            colArray[idx] = BLUE_COLOR.r + (targetColor.r - BLUE_COLOR.r) * mixFactor;
-            colArray[idx + 1] = BLUE_COLOR.g + (targetColor.g - BLUE_COLOR.g) * mixFactor;
-            colArray[idx + 2] = BLUE_COLOR.b + (targetColor.b - BLUE_COLOR.b) * mixFactor;
+            if (this.opacity < this.targetOpacity) {
+                this.opacity += 0.01;
+            }
         }
-        
-        posArray[idx] += velocities[idx] * 0.02;
-        posArray[idx + 1] += velocities[idx + 1] * 0.02;
-        
-        if (posArray[idx] < -0.7) posArray[idx] = -0.7;
-        if (posArray[idx] > 0.7) posArray[idx] = 0.7;
-        if (posArray[idx + 1] < -0.7) posArray[idx + 1] = -0.7;
-        if (posArray[idx + 1] > 0.7) posArray[idx + 1] = 0.7;
+
+        if (this.x > width + 200 || this.x < -200 || this.opacity < 0.01) {
+            this.reset(this.color, this.side);
+        }
     }
-    
-    posAttr.needsUpdate = true;
-    colAttr.needsUpdate = true;
+
+    draw() {
+        const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size);
+        gradient.addColorStop(0, this.color);
+        gradient.addColorStop(0.5, this.color.replace('1)', '0.6)'));
+        gradient.addColorStop(1, 'transparent');
+
+        ctx.globalAlpha = this.opacity;
+        ctx.filter = `blur(${this.blur}px)`;
+        ctx.fillStyle = gradient;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.filter = 'none';
+        ctx.globalAlpha = 1;
+    }
 }
 
-function animate(timestamp) {
-    updateGas(timestamp);
-    renderer.render(scene, camera);
+const particles = [];
+const blueColor = 'rgba(100, 170, 255, 1)';
+const pinkColor = 'rgba(255, 130, 180, 1)';
+const purpleColor = 'rgba(180, 140, 255, 1)';
+
+for (let i = 0; i < 25; i++) {
+    const p = new Particle(blueColor, 'left');
+    p.opacity = Math.random() * 0.4 + 0.2;
+    p.x = -Math.random() * 200;
+    particles.push(p);
+}
+
+for (let i = 0; i < 25; i++) {
+    const p = new Particle(pinkColor, 'right');
+    p.opacity = Math.random() * 0.4 + 0.2;
+    p.x = width + Math.random() * 200;
+    particles.push(p);
+}
+
+for (let i = 0; i < 15; i++) {
+    const p = new Particle(purpleColor, 'center');
+    p.x = width / 2 + (Math.random() - 0.5) * 300;
+    p.opacity = Math.random() * 0.3 + 0.1;
+    p.speedX = (Math.random() - 0.5) * 0.3;
+    p.speedY = (Math.random() - 0.5) * 0.5;
+    p.targetOpacity = Math.random() * 0.3 + 0.1;
+    p.size = Math.random() * 80 + 40;
+    particles.push(p);
+}
+
+function animate() {
+    ctx.clearRect(0, 0, width, height);
+
+    particles.forEach(p => {
+        p.update();
+        p.draw();
+    });
+
+    const centerGlow = ctx.createRadialGradient(width / 2, height / 2, 0, width / 2, height / 2, 300);
+    centerGlow.addColorStop(0, 'rgba(200, 180, 255, 0.15)');
+    centerGlow.addColorStop(0.5, 'rgba(180, 200, 255, 0.1)');
+    centerGlow.addColorStop(1, 'transparent');
+    ctx.globalAlpha = 0.5;
+    ctx.filter = 'blur(20px)';
+    ctx.fillStyle = centerGlow;
+    ctx.fillRect(width / 2 - 300, height / 2 - 300, 600, 600);
+    ctx.filter = 'none';
+    ctx.globalAlpha = 1;
+
     requestAnimationFrame(animate);
 }
 
-requestAnimationFrame(animate);
+setTimeout(() => {
+    animate();
+}, 300);
 
 window.addEventListener('resize', () => {
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    camera.updateProjectionMatrix();
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
 });
