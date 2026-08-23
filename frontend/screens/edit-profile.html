@@ -1,0 +1,39 @@
+<div class="container">
+    <button class="back-button" onclick="showSettings()">← Назад</button>
+    <h1>Knot</h1>
+    
+    <div class="form-group">
+        <label>Имя</label>
+        <input type="text" id="edit-name" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+    </div>
+    
+    <div class="form-group">
+        <label>Пол</label>
+        <select id="edit-gender">
+            <option value="male">Мужской</option>
+            <option value="female">Женский</option>
+        </select>
+    </div>
+    
+    <div class="form-group">
+        <label>Дата начала отношений</label>
+        <input type="date" id="edit-relationship_date">
+    </div>
+    
+    <div class="form-group">
+        <label>Город</label>
+        <input type="text" id="edit-city" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+    </div>
+    
+    <div class="form-group">
+        <label>Личные увлечения</label>
+        <textarea id="edit-personal_hobbies" rows="3" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+    </div>
+    
+    <div class="form-group">
+        <label>Совместные увлечения</label>
+        <textarea id="edit-shared_hobbies" rows="3" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+    </div>
+    
+    <button onclick="saveEditProfile()">Сохранить изменения</button>
+</div>

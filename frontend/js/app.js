@@ -12,7 +12,7 @@ async function loadScreens() {
         'main-screen': 'screens/main.html',
         'interactive-screen': 'screens/interactive.html',
         'settings-screen': 'screens/settings.html',
-        'edit-profile-screen': 'screens/onboarding.html',
+        'edit-profile-screen': 'screens/edit-profile.html',
         'payment-screen': 'screens/payment.html'
     };
     
