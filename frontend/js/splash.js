@@ -98,7 +98,6 @@ for (let i = 0; i < 15; i++) {
 
 function animate() {
     ctx.clearRect(0, 0, width, height);
-
     particles.forEach(p => {
         p.update();
         p.draw();
@@ -118,11 +117,20 @@ function animate() {
     requestAnimationFrame(animate);
 }
 
-setTimeout(() => {
-    animate();
-}, 300);
+animate();
 
 window.addEventListener('resize', () => {
     width = canvas.width = window.innerWidth;
     height = canvas.height = window.innerHeight;
 });
+
+setTimeout(() => {
+    const splash = document.getElementById('splash-screen');
+    if (splash) {
+        splash.style.transition = 'opacity 0.8s ease';
+        splash.style.opacity = '0';
+        setTimeout(() => {
+            splash.style.display = 'none';
+        }, 800);
+    }
+}, 3000);
