@@ -1,0 +1,108 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
+    background: #ffffff;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+    overflow: hidden;
+    position: relative;
+    cursor: default;
+    user-select: none;
+    padding: 0;
+}
+
+#gas-webgl {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.fog-soft {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    background: 
+        radial-gradient(circle at 50% 50%, rgba(255, 180, 200, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 50% 50%, rgba(160, 210, 255, 0.15) 0%, transparent 40%);
+    mix-blend-mode: multiply;
+    opacity: 0.8;
+}
+
+.logo-container {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    animation: logoAppear 2.5s cubic-bezier(0.15, 1, 0.3, 1) forwards;
+    opacity: 0;
+    transform: scale(0.9) translateY(20px);
+    filter: drop-shadow(0 0 30px rgba(255, 255, 255, 0.8));
+    pointer-events: auto;
+}
+
+.logo-knot {
+    font-size: clamp(5rem, 20vw, 10rem);
+    font-weight: 650;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    background: linear-gradient(135deg, #ff5da2 0%, #b182ff 50%, #4d8bff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 0 0 45px rgba(255, 130, 200, 0.7), 0 0 90px rgba(100, 180, 255, 0.6);
+    white-space: nowrap;
+    animation: textBreathing 4s ease-in-out infinite alternate;
+}
+
+@keyframes logoAppear {
+    0% { opacity: 0; transform: scale(0.85) translateY(30px); filter: blur(10px); }
+    100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
+}
+
+@keyframes textBreathing {
+    0% { text-shadow: 0 0 30px rgba(255, 120, 190, 0.5), 0 0 70px rgba(80, 190, 255, 0.4); }
+    100% { text-shadow: 0 0 50px rgba(255, 140, 210, 0.8), 0 0 100px rgba(120, 200, 255, 0.7); }
+}
+
+.splash {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    overflow: hidden;
+    animation: splashFade 0.8s ease forwards;
+    animation-delay: 3.5s;
+    background: #ffffff;
+}
+
+@keyframes splashFade {
+    to {
+        opacity: 0;
+        visibility: hidden;
+    }
+}

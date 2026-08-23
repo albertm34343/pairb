@@ -2,265 +2,34 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>Knot</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <title>KNOT</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/splash.css">
+    <link rel="stylesheet" href="css/onboarding.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/interactive.css">
+    <link rel="stylesheet" href="css/settings.css">
+    <link rel="stylesheet" href="css/payment.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Inter', -apple-system, sans-serif;
-            background: #f5f5f7;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        
-        /* Splash Screen */
-        .splash {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: #0d0d0f;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
-            animation: splashFade 0.8s ease forwards;
-            animation-delay: 2.4s;
-        }
-        
-        .splash-title {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 64px;
-            font-weight: 500;
-            color: white;
-            letter-spacing: 2px;
-            opacity: 0;
-            animation: titleAppear 1.2s ease forwards;
-        }
-        
-        @keyframes titleAppear {
-            0% {
-                opacity: 0;
-                transform: scale(0.95);
-                letter-spacing: 8px;
-            }
-            50% {
-                opacity: 1;
-                transform: scale(1);
-                letter-spacing: 2px;
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1);
-                letter-spacing: 2px;
-            }
-        }
-        
-        @keyframes splashFade {
-            to {
-                opacity: 0;
-                visibility: hidden;
-            }
-        }
-        
-        /* Containers */
-        .container {
-            background: rgba(255, 255, 255, 0.65);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-radius: 24px;
-            padding: 32px 24px;
-            width: 100%;
-            max-width: 400px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.08);
-            border: 1px solid rgba(255,255,255,0.4);
-        }
-        
-        h1 {
-            text-align: center;
-            margin-bottom: 24px;
-            font-size: 28px;
-            font-weight: 300;
-            font-family: 'Cormorant Garamond', serif;
-            color: #1a1a1e;
-        }
-        
-        .partner-info {
-            text-align: center;
-            margin-bottom: 24px;
-            color: #8e8e93;
-            font-size: 13px;
-            font-weight: 400;
-        }
-        
-        /* Form Elements */
-        .form-group {
-            margin-bottom: 14px;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 6px;
-            font-size: 12px;
-            font-weight: 500;
-            color: #6e6e73;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        input, select, textarea {
-            width: 100%;
-            padding: 14px 16px;
-            border: none;
-            border-radius: 12px;
-            font-size: 15px;
-            outline: none;
-            -webkit-appearance: none;
-            appearance: none;
-            background: rgba(255, 255, 255, 0.55);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            caret-color: #007aff;
-            color: #1a1a1e;
-            font-family: 'Inter', sans-serif;
-            font-weight: 400;
-            transition: all 0.2s ease;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-        }
-        
-        input:focus, select:focus, textarea:focus {
-            background: rgba(255, 255, 255, 0.8);
-            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.12);
-        }
-        
-        textarea {
-            resize: none;
-        }
-        
-        select {
-            cursor: pointer;
-        }
-        
-        /* Buttons */
-        button {
-            width: 100%;
-            padding: 16px;
-            background: #0d0d0f;
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 15px;
-            font-weight: 500;
-            cursor: pointer;
-            font-family: 'Inter', sans-serif;
-            transition: all 0.2s ease;
-            letter-spacing: 0.3px;
-        }
-        
-        button:hover {
-            background: #1c1c20;
-            transform: translateY(-1px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-        }
-        
-        button:active {
-            transform: translateY(0);
-            box-shadow: none;
-        }
-        
-        .menu-button {
-            margin-bottom: 10px;
-            background: rgba(255, 255, 255, 0.55);
-            backdrop-filter: blur(10px);
-            color: #1a1a1e;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-        }
-        
-        .menu-button:hover {
-            background: rgba(255, 255, 255, 0.75);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-        }
-        
-        .back-button {
-            background: rgba(255, 255, 255, 0.55);
-            backdrop-filter: blur(10px);
-            color: #1a1a1e;
-            margin-bottom: 16px;
-            text-align: left;
-            padding: 12px 16px;
-            font-size: 14px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-        }
-        
-        .danger-button {
-            background: rgba(255, 59, 48, 0.85);
-            backdrop-filter: blur(10px);
-        }
-        
-        .danger-button:hover {
-            background: rgba(255, 59, 48, 1);
-        }
-        
-        /* Settings */
-        .settings-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 14px 0;
-            border-bottom: 1px solid rgba(0,0,0,0.06);
-        }
-        
-        .settings-label {
-            font-size: 14px;
-            font-weight: 500;
-            color: #1a1a1e;
-        }
-        
-        .edit-link {
-            color: #007aff;
-            font-size: 13px;
-            font-weight: 500;
-            cursor: pointer;
-            text-decoration: none;
-            transition: opacity 0.2s;
-        }
-        
-        .edit-link:hover {
-            opacity: 0.7;
-        }
-        
-        /* Toast */
         .toast {
             position: fixed;
             top: 20px;
             left: 50%;
             transform: translateX(-50%);
             background: rgba(0,0,0,0.75);
-            backdrop-filter: blur(10px);
             color: white;
             padding: 12px 24px;
-            border-radius: 100px;
-            font-size: 13px;
-            font-weight: 400;
+            border-radius: 8px;
+            font-size: 14px;
             z-index: 1000;
             display: none;
+            pointer-events: none;
         }
         
-        /* Confirm */
         .confirm-overlay {
             position: fixed;
             top: 0;
@@ -268,7 +37,6 @@
             right: 0;
             bottom: 0;
             background: rgba(0,0,0,0.4);
-            backdrop-filter: blur(5px);
             display: none;
             align-items: center;
             justify-content: center;
@@ -276,9 +44,8 @@
         }
         
         .confirm-box {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(20px);
-            border-radius: 24px;
+            background: white;
+            border-radius: 16px;
             padding: 24px;
             width: 90%;
             max-width: 300px;
@@ -287,21 +54,28 @@
         
         .confirm-buttons {
             display: flex;
-            gap: 10px;
+            gap: 12px;
             margin-top: 16px;
+        }
+        
+        .screen {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
     </style>
 </head>
 <body>
-    <div class="splash" id="splash">
-        <div class="splash-title">Knot</div>
-    </div>
-    
+    <!-- Toast -->
     <div class="toast" id="toast"></div>
     
+    <!-- Confirm -->
     <div class="confirm-overlay" id="confirm-overlay">
         <div class="confirm-box">
-            <p id="confirm-text" style="margin-bottom:16px; font-size:14px; color:#1a1a1e;"></p>
+            <p id="confirm-text" style="margin-bottom:16px;"></p>
             <div class="confirm-buttons">
                 <button onclick="confirmAction(false)">Отмена</button>
                 <button class="danger-button" onclick="confirmAction(true)">Да</button>
@@ -309,356 +83,31 @@
         </div>
     </div>
     
-    <div class="container" id="onboarding-container" style="display:none;">
-        <h1>Knot</h1>
-        <p class="partner-info" id="onboarding-partner"></p>
-        <p style="text-align:center; margin-bottom:24px; color:#8e8e93; font-size:13px;">Заполните данные о себе</p>
-        
-        <div class="form-group">
-            <label>Имя</label>
-            <input type="text" id="name" placeholder="Ваше имя" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-        </div>
-        
-        <div class="form-group">
-            <label>Пол</label>
-            <select id="gender">
-                <option value="">Выберите...</option>
-                <option value="male">Мужской</option>
-                <option value="female">Женский</option>
-            </select>
-        </div>
-        
-        <div class="form-group">
-            <label>Дата начала отношений</label>
-            <input type="date" id="relationship_date">
-        </div>
-        
-        <div class="form-group">
-            <label>Город</label>
-            <input type="text" id="city" placeholder="Ваш город" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-        </div>
-        
-        <div class="form-group">
-            <label>Личные увлечения</label>
-            <textarea id="personal_hobbies" rows="3" placeholder="Например: спорт, музыка, книги" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
-        </div>
-        
-        <div class="form-group">
-            <label>Совместные увлечения</label>
-            <textarea id="shared_hobbies" rows="3" placeholder="Например: путешествия, кино, готовка" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
-        </div>
-        
-        <button onclick="submitOnboarding()">Сохранить</button>
+    <!-- Screens -->
+    <div id="splash-screen" class="screen"></div>
+    <div id="no-pair-screen" class="screen" style="display:none;">
+        <div style="text-align:center; color:#666; font-size:16px;">Сначала создайте пару через бота</div>
     </div>
-    
-    <div class="container" id="main-container" style="display:none;">
-        <h1>Knot</h1>
-        <p class="partner-info" id="main-partner"></p>
-        <p style="text-align:center; margin-bottom:24px; color:#8e8e93; font-size:13px;" id="welcome-text"></p>
-        
-        <button class="menu-button" onclick="showSettings()">⚙️ Настройки</button>
-        <button class="menu-button" onclick="showToast('Интерактив скоро появится')">🎮 Интерактив</button>
-    </div>
-    
-    <div class="container" id="settings-container" style="display:none;">
-        <button class="back-button" onclick="showMain()">← Назад</button>
-        <h1>Knot</h1>
-        <p class="partner-info" id="settings-partner"></p>
-        
-        <div class="settings-row">
-            <span class="settings-label">О себе</span>
-            <a class="edit-link" onclick="showEditProfile()">Редактировать</a>
-        </div>
-        
-        <div class="settings-row">
-            <span class="settings-label">Полный доступ</span>
-            <a class="edit-link" onclick="showToast('Оплата скоро появится')">Купить</a>
-        </div>
-        
-        <div style="height: 24px;"></div>
-        
-        <button class="danger-button" onclick="breakPair()">💔 Разорвать пару</button>
-    </div>
-    
-    <div class="container" id="edit-profile-container" style="display:none;">
-        <button class="back-button" onclick="showSettings()">← Назад</button>
-        <h1>Knot</h1>
-        
-        <div class="form-group">
-            <label>Имя</label>
-            <input type="text" id="edit-name" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-        </div>
-        
-        <div class="form-group">
-            <label>Пол</label>
-            <select id="edit-gender">
-                <option value="male">Мужской</option>
-                <option value="female">Женский</option>
-            </select>
-        </div>
-        
-        <div class="form-group">
-            <label>Дата начала отношений</label>
-            <input type="date" id="edit-relationship_date">
-        </div>
-        
-        <div class="form-group">
-            <label>Город</label>
-            <input type="text" id="edit-city" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-        </div>
-        
-        <div class="form-group">
-            <label>Личные увлечения</label>
-            <textarea id="edit-personal_hobbies" rows="3" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
-        </div>
-        
-        <div class="form-group">
-            <label>Совместные увлечения</label>
-            <textarea id="edit-shared_hobbies" rows="3" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
-        </div>
-        
-        <button onclick="saveEditProfile()">Сохранить изменения</button>
-    </div>
-    
-    <div class="container" id="no-pair-container" style="display:none;">
-        <h1>Knot</h1>
-        <p style="text-align:center; margin-bottom:24px; color:#8e8e93; font-size:13px;">Сначала создайте пару через бота</p>
-    </div>
+    <div id="onboarding-screen" class="screen" style="display:none;"></div>
+    <div id="main-screen" class="screen" style="display:none;"></div>
+    <div id="interactive-screen" class="screen" style="display:none;"></div>
+    <div id="settings-screen" class="screen" style="display:none;"></div>
+    <div id="payment-screen" class="screen" style="display:none;"></div>
     
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script>
-        const tg = window.Telegram.WebApp;
-        tg.expand();
-        
-        let currentUser = null;
-        let pairCheckInterval = null;
-        let confirmCallback = null;
-        
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.style.display = 'block';
-            setTimeout(() => {
-                toast.style.display = 'none';
-            }, 2000);
-        }
-        
-        function showConfirm(message, callback) {
-            document.getElementById('confirm-text').textContent = message;
-            document.getElementById('confirm-overlay').style.display = 'flex';
-            confirmCallback = callback;
-        }
-        
-        function confirmAction(result) {
-            document.getElementById('confirm-overlay').style.display = 'none';
-            if (confirmCallback) confirmCallback(result);
-            confirmCallback = null;
-        }
-        
-        function hideAll() {
-            document.querySelectorAll('.container').forEach(c => c.style.display = 'none');
-        }
-        
-        async function checkOnboarding() {
-            const telegram_id = tg.initDataUnsafe?.user?.id;
-            
-            if (!telegram_id) {
-                showToast('Ошибка: нет данных пользователя');
-                return;
-            }
-            
-            try {
-                const response = await fetch(`/api/check_onboarding/${telegram_id}`);
-                const data = await response.json();
-                
-                if (!data.exists || !data.pair_id) {
-                    showNoPair();
-                } else if (data.onboarding_done) {
-                    currentUser = data;
-                    hideAll();
-                    document.getElementById('main-container').style.display = 'block';
-                    document.getElementById('welcome-text').textContent = `Привет, ${data.name}!`;
-                    const partnerText = data.partner_username ? `Ваш партнёр: @${data.partner_username}` : '';
-                    document.getElementById('main-partner').textContent = partnerText;
-                    startPairCheck();
-                } else {
-                    hideAll();
-                    document.getElementById('onboarding-container').style.display = 'block';
-                    const partnerText = data.partner_username ? `Ваш партнёр: @${data.partner_username}` : '';
-                    document.getElementById('onboarding-partner').textContent = partnerText;
-                    startPairCheck();
-                }
-            } catch (e) {
-                showToast('Ошибка загрузки');
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.128.0/build/three.module.js"
             }
         }
-        
-        function showNoPair() {
-            hideAll();
-            document.getElementById('no-pair-container').style.display = 'block';
-            if (pairCheckInterval) clearInterval(pairCheckInterval);
-        }
-        
-        function startPairCheck() {
-            if (pairCheckInterval) clearInterval(pairCheckInterval);
-            pairCheckInterval = setInterval(async () => {
-                const telegram_id = tg.initDataUnsafe?.user?.id;
-                try {
-                    const response = await fetch(`/api/check_onboarding/${telegram_id}`);
-                    const data = await response.json();
-                    if (!data.exists || !data.pair_id) {
-                        showNoPair();
-                    }
-                } catch (e) {
-                    // ignore
-                }
-            }, 3000);
-        }
-        
-        async function submitOnboarding() {
-            const data = {
-                telegram_id: tg.initDataUnsafe?.user?.id,
-                name: document.getElementById('name').value,
-                gender: document.getElementById('gender').value,
-                relationship_date: document.getElementById('relationship_date').value,
-                city: document.getElementById('city').value,
-                personal_hobbies: document.getElementById('personal_hobbies').value,
-                shared_hobbies: document.getElementById('shared_hobbies').value
-            };
-            
-            if (!data.name || !data.gender || !data.relationship_date || !data.city) {
-                showToast('Заполните все поля');
-                return;
-            }
-            
-            try {
-                const response = await fetch('/api/onboarding', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
-                });
-                
-                if (response.ok) {
-                    currentUser = data;
-                    hideAll();
-                    document.getElementById('main-container').style.display = 'block';
-                    document.getElementById('welcome-text').textContent = `Привет, ${data.name}!`;
-                    const partnerText = currentUser.partner_username ? `Ваш партнёр: @${currentUser.partner_username}` : '';
-                    document.getElementById('main-partner').textContent = partnerText;
-                } else {
-                    showToast('Ошибка сохранения');
-                }
-            } catch (e) {
-                showToast('Ошибка сети');
-            }
-        }
-        
-        async function showSettings() {
-            hideAll();
-            document.getElementById('settings-container').style.display = 'block';
-            
-            const telegram_id = tg.initDataUnsafe?.user?.id;
-            
-            try {
-                const response = await fetch(`/api/check_onboarding/${telegram_id}`);
-                const data = await response.json();
-                
-                currentUser = data;
-                const partnerText = data.partner_username ? `Ваш партнёр: @${data.partner_username}` : '';
-                document.getElementById('settings-partner').textContent = partnerText;
-            } catch (e) {
-                showToast('Ошибка загрузки настроек');
-            }
-        }
-        
-        function showMain() {
-            hideAll();
-            document.getElementById('main-container').style.display = 'block';
-            document.getElementById('welcome-text').textContent = `Привет, ${currentUser.name}!`;
-            const partnerText = currentUser.partner_username ? `Ваш партнёр: @${currentUser.partner_username}` : '';
-            document.getElementById('main-partner').textContent = partnerText;
-        }
-        
-        async function showEditProfile() {
-            hideAll();
-            document.getElementById('edit-profile-container').style.display = 'block';
-            
-            const telegram_id = tg.initDataUnsafe?.user?.id;
-            
-            try {
-                const response = await fetch(`/api/get_profile/${telegram_id}`);
-                const data = await response.json();
-                
-                document.getElementById('edit-name').value = data.name || '';
-                document.getElementById('edit-gender').value = data.gender || 'male';
-                document.getElementById('edit-relationship_date').value = data.relationship_date || '';
-                document.getElementById('edit-city').value = data.city || '';
-                document.getElementById('edit-personal_hobbies').value = data.personal_hobbies || '';
-                document.getElementById('edit-shared_hobbies').value = data.shared_hobbies || '';
-            } catch (e) {
-                showToast('Ошибка загрузки профиля');
-            }
-        }
-        
-        async function saveEditProfile() {
-            const data = {
-                telegram_id: tg.initDataUnsafe?.user?.id,
-                name: document.getElementById('edit-name').value.trim(),
-                gender: document.getElementById('edit-gender').value,
-                relationship_date: document.getElementById('edit-relationship_date').value,
-                city: document.getElementById('edit-city').value.trim(),
-                personal_hobbies: document.getElementById('edit-personal_hobbies').value.trim(),
-                shared_hobbies: document.getElementById('edit-shared_hobbies').value.trim()
-            };
-            
-            if (!data.name || !data.gender || !data.relationship_date || !data.city) {
-                showToast('Заполните все поля');
-                return;
-            }
-            
-            try {
-                const response = await fetch('/api/update_profile', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
-                });
-                
-                if (response.ok) {
-                    showToast('Данные обновлены!');
-                    currentUser.name = data.name;
-                    showSettings();
-                } else {
-                    showToast('Ошибка сохранения');
-                }
-            } catch (e) {
-                showToast('Ошибка сети');
-            }
-        }
-        
-        async function breakPair() {
-            showConfirm('Вы уверены, что хотите разорвать пару?', async (result) => {
-                if (!result) return;
-                
-                const telegram_id = tg.initDataUnsafe?.user?.id;
-                
-                try {
-                    const response = await fetch(`/api/break_pair/${telegram_id}`, {
-                        method: 'POST'
-                    });
-                    
-                    if (response.ok) {
-                        showToast('Пара разорвана');
-                        setTimeout(() => tg.close(), 1000);
-                    } else {
-                        showToast('Ошибка');
-                    }
-                } catch (e) {
-                    showToast('Ошибка сети');
-                }
-            });
-        }
-        
-        checkOnboarding();
     </script>
+    <script type="module" src="js/splash.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/onboarding.js"></script>
+    <script src="js/settings.js"></script>
+    <script src="js/interactive.js"></script>
+    <script src="js/payment.js"></script>
 </body>
 </html>
