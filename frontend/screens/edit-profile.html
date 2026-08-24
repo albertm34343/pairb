@@ -1,6 +1,6 @@
-<div class="container">
-    <button class="back-button" onclick="showSettings()">← Назад</button>
-    <h1>Knot</h1>
+<div class="edit-profile-page">
+    <h1 class="edit-profile-logo">knot</h1>
+    <p class="edit-profile-subtitle">Редактирование профиля</p>
     
     <div class="form-group">
         <label>Имя</label>
@@ -35,5 +35,6 @@
         <textarea id="edit-shared_hobbies" rows="3" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
     </div>
     
-    <button onclick="saveEditProfile()">Сохранить изменения</button>
+    <button class="edit-profile-submit" onclick="saveEditProfile()">Сохранить изменения</button>
+    <button class="edit-profile-back" onclick="showSettings()">Назад</button>
 </div>

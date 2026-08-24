@@ -1,0 +1,147 @@
+.edit-profile-page {
+    min-height: 100vh;
+    width: 100%;
+    padding: 40px 16px 20px;
+    background: linear-gradient(135deg, #e8f0ff 0%, #f5e8ff 30%, #ffe8f2 65%, #e8f5ff 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.edit-profile-logo {
+    font-size: clamp(2.5rem, 10vw, 4rem);
+    font-weight: 900;
+    letter-spacing: -0.05em;
+    line-height: 1;
+    margin-bottom: 8px;
+    text-align: center;
+    background: linear-gradient(90deg, #5a9eff, #8a6eff, #c46eff, #ff7ab8, #5a9eff);
+    background-size: 300% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: editGradient 5s linear infinite;
+}
+
+@keyframes editGradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.edit-profile-subtitle {
+    text-align: center;
+    margin-bottom: 24px;
+    color: #6e6e73;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.form-group {
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 10px;
+}
+
+label {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #3a3a3e;
+    font-family: 'Inter', sans-serif;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    caret-color: #007aff;
+    color: #1a1a1e;
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+
+input:focus, select:focus, textarea:focus {
+    background: rgba(255, 255, 255, 0.85);
+    box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.12);
+}
+
+textarea {
+    resize: none;
+    height: 60px;
+}
+
+select {
+    cursor: pointer;
+}
+
+.edit-profile-submit {
+    width: 100%;
+    max-width: 400px;
+    padding: 14px;
+    margin-top: 6px;
+    background: linear-gradient(135deg, #5a9eff 0%, #8a6eff 30%, #c46eff 65%, #ff7ab8 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    transition: all 0.3s ease;
+    letter-spacing: 0.3px;
+}
+
+.edit-profile-submit:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+.edit-profile-submit:active {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.edit-profile-back {
+    width: 100%;
+    max-width: 400px;
+    padding: 14px;
+    margin-top: 10px;
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 10px;
+    color: #1a1a1e;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    transition: all 0.3s ease;
+}
+
+.edit-profile-back:hover {
+    background: rgba(255, 255, 255, 0.35);
+}
+
+.edit-profile-back:active {
+    background: rgba(255, 255, 255, 0.45);
+    transform: scale(0.98);
+}

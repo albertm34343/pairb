@@ -62,6 +62,13 @@
     border: 1px solid rgba(255, 255, 255, 0.4);
     border-radius: 14px;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+    transition: all 0.4s ease;
+}
+
+.settings-row:active {
+    background: rgba(255, 255, 255, 0.35);
+    transform: scale(0.99);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
 }
 
 .settings-label {
@@ -78,7 +85,7 @@
     cursor: pointer;
     font-family: 'Inter', sans-serif;
     text-decoration: none;
-    transition: opacity 0.2s;
+    transition: opacity 0.3s;
 }
 
 .settings-link:hover {
@@ -89,6 +96,7 @@
     width: 100%;
     max-width: 400px;
     padding: 16px;
+    margin-top: auto;
     background: rgba(255, 100, 100, 0.25);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
@@ -99,7 +107,7 @@
     font-weight: 600;
     cursor: pointer;
     font-family: 'Inter', sans-serif;
-    transition: all 0.3s ease;
+    transition: all 0.4s ease;
     letter-spacing: 0.3px;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
 }
@@ -107,10 +115,10 @@
 .settings-danger:hover {
     background: rgba(255, 100, 100, 0.35);
     border-color: rgba(255, 100, 100, 0.6);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
 }
 
 .settings-danger:active {
     background: rgba(255, 100, 100, 0.45);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transform: scale(0.98);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
 }
