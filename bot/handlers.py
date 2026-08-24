@@ -32,7 +32,7 @@ async def start(message: types.Message):
         
         if user.pair_id:
             kb = InlineKeyboardMarkup(inline_keyboard=[
-                [InlineKeyboardButton(text="📱 Открыть приложение", web_app=types.WebAppInfo(url="https://24pair.ru?v=4"))]
+                [InlineKeyboardButton(text="📱 Открыть приложение", web_app=types.WebAppInfo(url="https://24pair.ru?v=5"))]
             ])
             await message.answer("Вы уже в паре!", reply_markup=kb)
             return
@@ -140,7 +140,7 @@ async def process_accept(callback: types.CallbackQuery):
         await session.commit()
         
         kb = InlineKeyboardMarkup(inline_keyboard=[
-            [InlineKeyboardButton(text="📱 Открыть приложение", web_app=types.WebAppInfo(url="https://24pair.ru?v=4"))]
+            [InlineKeyboardButton(text="📱 Открыть приложение", web_app=types.WebAppInfo(url="https://24pair.ru?v=5"))]
         ])
         
         await callback.message.edit_text(
