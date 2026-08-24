@@ -29,12 +29,14 @@
     border: 1px solid rgba(255, 255, 255, 0.4);
     border-radius: 50%;
     color: #3a3a3e;
-    font-size: 20px;
+    font-size: 22px;
     cursor: pointer;
     text-decoration: none;
     font-weight: 300;
     transition: all 0.3s ease;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    line-height: 1;
+    padding: 0;
 }
 
 .settings-back:hover {
