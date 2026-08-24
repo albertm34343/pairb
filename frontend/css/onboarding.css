@@ -1,39 +1,45 @@
-.container {
-    background: rgba(255, 255, 255, 0.75);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-radius: 24px;
-    padding: 32px 24px;
-    width: min(400px, 92vw);
-    max-height: 85vh;
+.onboarding-page {
+    min-height: 100vh;
+    width: 100%;
+    max-width: 500px;
+    padding: 40px 20px;
+    background: linear-gradient(135deg, #e8f0ff 0%, #f5e8ff 30%, #ffe8f2 65%, #e8f5ff 100%);
     overflow-y: auto;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.08);
-    border: 1px solid rgba(255,255,255,0.4);
-    position: relative;
-    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-h1 {
-    text-align: center;
-    margin-bottom: 24px;
-    font-size: 28px;
-    font-weight: 300;
-    font-family: 'Montserrat', sans-serif;
-    letter-spacing: 6px;
-    background: linear-gradient(135deg, #ff5da2, #b182ff, #4d8bff);
+.onboarding-logo {
+    font-size: clamp(3rem, 12vw, 5rem);
+    font-weight: 900;
+    letter-spacing: -0.05em;
+    line-height: 1;
+    background: linear-gradient(135deg, #5a9eff 0%, #8a6eff 30%, #c46eff 65%, #ff7ab8 100%);
     -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
     background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 10px 30px rgba(100, 140, 255, 0.2));
+    margin-bottom: 16px;
+    text-align: center;
+}
+
+.onboarding-subtitle {
+    text-align: center;
+    margin-bottom: 32px;
+    color: #8e8e93;
+    font-size: 14px;
 }
 
 .partner-info {
     text-align: center;
-    margin-bottom: 24px;
+    margin-bottom: 8px;
     color: #8e8e93;
     font-size: 13px;
 }
 
 .form-group {
+    width: 100%;
     margin-bottom: 14px;
 }
 
@@ -80,10 +86,11 @@ select {
     cursor: pointer;
 }
 
-button {
+.onboarding-submit {
     width: 100%;
     padding: 16px;
-    background: linear-gradient(135deg, #ff5da2, #b182ff, #4d8bff);
+    margin-top: 8px;
+    background: linear-gradient(135deg, #5a9eff 0%, #8a6eff 30%, #c46eff 65%, #ff7ab8 100%);
     color: white;
     border: none;
     border-radius: 12px;
@@ -95,13 +102,13 @@ button {
     letter-spacing: 0.3px;
 }
 
-button:hover {
+.onboarding-submit:hover {
     opacity: 0.9;
     transform: translateY(-1px);
     box-shadow: 0 8px 20px rgba(0,0,0,0.15);
 }
 
-button:active {
+.onboarding-submit:active {
     transform: translateY(0);
     box-shadow: none;
 }
