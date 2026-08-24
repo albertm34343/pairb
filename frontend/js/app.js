@@ -8,6 +8,7 @@ let confirmCallback = null;
 async function loadScreens() {
     const screens = {
         'splash-screen': 'screens/splash.html',
+        'no-pair-screen': 'screens/no-pair.html',
         'onboarding-screen': 'screens/onboarding.html',
         'main-screen': 'screens/main.html',
         'interactive-screen': 'screens/interactive.html',
