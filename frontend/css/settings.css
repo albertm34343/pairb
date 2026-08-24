@@ -1,12 +1,40 @@
 .settings-page {
     min-height: 100vh;
     width: 100%;
-    padding: 40px 20px 30px;
+    padding: 20px 20px 40px;
     background: linear-gradient(135deg, #e8f0ff 0%, #f5e8ff 30%, #ffe8f2 65%, #e8f5ff 100%);
     display: flex;
     flex-direction: column;
     align-items: center;
     position: relative;
+}
+
+.settings-header {
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.settings-back {
+    font-size: 24px;
+    color: #3a3a3e;
+    cursor: pointer;
+    text-decoration: none;
+    padding: 8px 12px;
+    font-weight: 300;
+    transition: all 0.3s ease;
+    line-height: 1;
+}
+
+.settings-back:hover {
+    opacity: 0.6;
+    transform: translateX(-2px);
+}
+
+.settings-back:active {
+    transform: translateX(-4px);
 }
 
 .settings-logo {
