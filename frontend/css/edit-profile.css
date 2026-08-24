@@ -1,7 +1,7 @@
 .edit-profile-page {
     min-height: 100vh;
     width: 100%;
-    padding: 30px 16px 60px;
+    padding: 20px 16px 40px;
     background: linear-gradient(135deg, #e8f0ff 0%, #f5e8ff 30%, #ffe8f2 65%, #e8f5ff 100%);
     display: flex;
     flex-direction: column;
@@ -9,11 +9,11 @@
 }
 
 .edit-profile-logo {
-    font-size: clamp(2.5rem, 10vw, 4rem);
+    font-size: clamp(2rem, 8vw, 3rem);
     font-weight: 900;
     letter-spacing: -0.05em;
     line-height: 1;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
     text-align: center;
     background: linear-gradient(90deg, #5a9eff, #8a6eff, #c46eff, #ff7ab8, #5a9eff);
     background-size: 300% 100%;
@@ -37,22 +37,22 @@
 
 .edit-profile-subtitle {
     text-align: center;
-    margin-bottom: 24px;
+    margin-bottom: 16px;
     color: #6e6e73;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 500;
 }
 
 .form-group {
     width: 100%;
-    max-width: 400px;
-    margin-bottom: 10px;
+    max-width: 380px;
+    margin-bottom: 8px;
 }
 
 label {
     display: block;
-    margin-bottom: 4px;
-    font-size: 14px;
+    margin-bottom: 3px;
+    font-size: 13px;
     font-weight: 600;
     color: #3a3a3e;
     font-family: 'Inter', sans-serif;
@@ -60,10 +60,10 @@ label {
 
 input, select, textarea {
     width: 100%;
-    padding: 12px 14px;
+    padding: 10px 12px;
     border: none;
     border-radius: 10px;
-    font-size: 15px;
+    font-size: 14px;
     outline: none;
     -webkit-appearance: none;
     appearance: none;
@@ -85,7 +85,7 @@ input:focus, select:focus, textarea:focus {
 
 textarea {
     resize: none;
-    height: 60px;
+    height: 50px;
 }
 
 select {
@@ -94,14 +94,14 @@ select {
 
 .edit-profile-submit {
     width: 100%;
-    max-width: 400px;
-    padding: 14px;
-    margin-top: 6px;
+    max-width: 380px;
+    padding: 12px;
+    margin-top: 4px;
     background: linear-gradient(135deg, #5a9eff 0%, #8a6eff 30%, #c46eff 65%, #ff7ab8 100%);
     color: white;
     border: none;
     border-radius: 10px;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 600;
     cursor: pointer;
     font-family: 'Inter', sans-serif;
@@ -121,17 +121,16 @@ select {
 
 .edit-profile-back {
     width: 100%;
-    max-width: 400px;
-    padding: 14px;
-    margin-top: 10px;
-    margin-bottom: 40px;
+    max-width: 380px;
+    padding: 12px;
+    margin-top: 8px;
     background: rgba(255, 255, 255, 0.25);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.4);
     border-radius: 10px;
     color: #1a1a1e;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 600;
     cursor: pointer;
     font-family: 'Inter', sans-serif;
