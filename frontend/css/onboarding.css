@@ -1,17 +1,16 @@
 .onboarding-page {
     min-height: 100vh;
     width: 100%;
-    max-width: 500px;
-    padding: 40px 20px;
+    padding: 20px 16px;
     background: linear-gradient(135deg, #e8f0ff 0%, #f5e8ff 30%, #ffe8f2 65%, #e8f5ff 100%);
-    overflow-y: auto;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
 }
 
 .onboarding-logo {
-    font-size: clamp(3rem, 12vw, 5rem);
+    font-size: clamp(2.5rem, 10vw, 4rem);
     font-weight: 900;
     letter-spacing: -0.05em;
     line-height: 1;
@@ -20,49 +19,48 @@
     background-clip: text;
     color: transparent;
     filter: drop-shadow(0 10px 30px rgba(100, 140, 255, 0.2));
-    margin-bottom: 16px;
+    margin-bottom: 12px;
     text-align: center;
 }
 
 .onboarding-subtitle {
     text-align: center;
-    margin-bottom: 32px;
-    color: #8e8e93;
-    font-size: 14px;
-}
-
-.partner-info {
-    text-align: center;
-    margin-bottom: 8px;
+    margin-bottom: 24px;
     color: #8e8e93;
     font-size: 13px;
 }
 
+.partner-info {
+    text-align: center;
+    margin-bottom: 6px;
+    color: #8e8e93;
+    font-size: 12px;
+}
+
 .form-group {
     width: 100%;
-    margin-bottom: 14px;
+    margin-bottom: 10px;
 }
 
 label {
     display: block;
-    margin-bottom: 6px;
-    font-size: 12px;
-    font-weight: 500;
-    color: #6e6e73;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #3a3a3e;
+    font-family: 'Inter', sans-serif;
 }
 
 input, select, textarea {
     width: 100%;
-    padding: 14px 16px;
+    padding: 12px 14px;
     border: none;
-    border-radius: 12px;
+    border-radius: 10px;
     font-size: 15px;
     outline: none;
     -webkit-appearance: none;
     appearance: none;
-    background: rgba(255, 255, 255, 0.55);
+    background: rgba(255, 255, 255, 0.6);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     caret-color: #007aff;
@@ -74,12 +72,13 @@ input, select, textarea {
 }
 
 input:focus, select:focus, textarea:focus {
-    background: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.85);
     box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.12);
 }
 
 textarea {
     resize: none;
+    height: 60px;
 }
 
 select {
@@ -88,14 +87,14 @@ select {
 
 .onboarding-submit {
     width: 100%;
-    padding: 16px;
-    margin-top: 8px;
+    padding: 14px;
+    margin-top: 6px;
     background: linear-gradient(135deg, #5a9eff 0%, #8a6eff 30%, #c46eff 65%, #ff7ab8 100%);
     color: white;
     border: none;
-    border-radius: 12px;
+    border-radius: 10px;
     font-size: 15px;
-    font-weight: 500;
+    font-weight: 600;
     cursor: pointer;
     font-family: 'Inter', sans-serif;
     transition: all 0.2s ease;
@@ -105,10 +104,8 @@ select {
 .onboarding-submit:hover {
     opacity: 0.9;
     transform: translateY(-1px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
 }
 
 .onboarding-submit:active {
     transform: translateY(0);
-    box-shadow: none;
 }
