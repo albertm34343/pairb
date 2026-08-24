@@ -16,23 +16,29 @@ async def start(message: types.Message):
         await accept_invite(message, args[1])
         return
     
+    username = message.from_user.username
+    
+    if not username:
+        await message.answer(
+            "❌ У вас не установлен username в Telegram.\n\n"
+            "Пожалуйста, установите его в настройках Telegram, чтобы пользоваться сервисом."
+        )
+        return
+    
     async with async_session() as session:
         user = await session.scalar(
-            select(User).where(User.telegram_id == str(message.from_user.id))
+            select(User).where(User.username == username)
         )
         
         if not user:
-            user = User(
-                telegram_id=str(message.from_user.id),
-                username=message.from_user.username
-            )
+            user = User(username=username)
             session.add(user)
             await session.commit()
             await session.refresh(user)
         
         if user.pair_id:
             kb = InlineKeyboardMarkup(inline_keyboard=[
-                [InlineKeyboardButton(text="📱 Открыть приложение", web_app=types.WebAppInfo(url="https://24pair.ru?v=6"))]
+                [InlineKeyboardButton(text="📱 Открыть приложение", web_app=types.WebAppInfo(url="https://24pair.ru?v=7"))]
             ])
             await message.answer("Вы уже в паре!", reply_markup=kb)
             return
@@ -58,6 +64,15 @@ async def start(message: types.Message):
         )
 
 async def accept_invite(message: types.Message, invite_token: str):
+    username = message.from_user.username
+    
+    if not username:
+        await message.answer(
+            "❌ У вас не установлен username в Telegram.\n\n"
+            "Пожалуйста, установите его в настройках Telegram."
+        )
+        return
+    
     async with async_session() as session:
         pair = await session.scalar(
             select(Pair).where(Pair.invite_token == invite_token)
@@ -72,19 +87,16 @@ async def accept_invite(message: types.Message, invite_token: str):
             return
         
         user1 = await session.get(User, pair.user1_id)
-        if user1 and user1.telegram_id == str(message.from_user.id):
+        if user1 and user1.username == username:
             await message.answer("❌ Нельзя пригласить самого себя")
             return
         
         user2 = await session.scalar(
-            select(User).where(User.telegram_id == str(message.from_user.id))
+            select(User).where(User.username == username)
         )
         
         if not user2:
-            user2 = User(
-                telegram_id=str(message.from_user.id),
-                username=message.from_user.username
-            )
+            user2 = User(username=username)
             session.add(user2)
             await session.commit()
             await session.refresh(user2)
@@ -106,6 +118,11 @@ async def accept_invite(message: types.Message, invite_token: str):
 @router.callback_query(lambda c: c.data and c.data.startswith("accept_"))
 async def process_accept(callback: types.CallbackQuery):
     invite_token = callback.data.replace("accept_", "")
+    username = callback.from_user.username
+    
+    if not username:
+        await callback.answer("Установите username в Telegram", show_alert=True)
+        return
     
     async with async_session() as session:
         pair = await session.scalar(
@@ -121,7 +138,7 @@ async def process_accept(callback: types.CallbackQuery):
             return
         
         user2 = await session.scalar(
-            select(User).where(User.telegram_id == str(callback.from_user.id))
+            select(User).where(User.username == username)
         )
         
         if not user2:
@@ -140,7 +157,7 @@ async def process_accept(callback: types.CallbackQuery):
         await session.commit()
         
         kb = InlineKeyboardMarkup(inline_keyboard=[
-            [InlineKeyboardButton(text="📱 Открыть приложение", web_app=types.WebAppInfo(url="https://24pair.ru?v=6"))]
+            [InlineKeyboardButton(text="📱 Открыть приложение", web_app=types.WebAppInfo(url="https://24pair.ru?v=7"))]
         ])
         
         await callback.message.edit_text(
@@ -151,7 +168,7 @@ async def process_accept(callback: types.CallbackQuery):
         
         try:
             await callback.bot.send_message(
-                user1.telegram_id,
+                user1.username,
                 "🎉 Ваш партнёр принял приглашение! Пара создана!",
                 reply_markup=kb
             )

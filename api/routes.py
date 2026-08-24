@@ -9,8 +9,7 @@ import datetime
 router = APIRouter()
 
 class OnboardingData(BaseModel):
-    telegram_id: int
-    name: str
+    username: str
     gender: str
     relationship_date: str
     city: str
@@ -21,7 +20,7 @@ class OnboardingData(BaseModel):
 async def save_onboarding(data: OnboardingData):
     async with async_session() as session:
         user = await session.scalar(
-            select(User).where(User.telegram_id == str(data.telegram_id))
+            select(User).where(User.username == data.username)
         )
         
         if not user:
@@ -30,7 +29,6 @@ async def save_onboarding(data: OnboardingData):
         if not user.pair_id:
             raise HTTPException(status_code=400, detail="No pair")
         
-        user.name = data.name
         user.gender = data.gender
         user.relationship_date = datetime.date.fromisoformat(data.relationship_date)
         user.city = data.city
@@ -42,11 +40,11 @@ async def save_onboarding(data: OnboardingData):
         
         return {"status": "ok"}
 
-@router.get("/api/check_onboarding/{telegram_id}")
-async def check_onboarding(telegram_id: int):
+@router.get("/api/check_onboarding/{username}")
+async def check_onboarding(username: str):
     async with async_session() as session:
         user = await session.scalar(
-            select(User).where(User.telegram_id == str(telegram_id))
+            select(User).where(User.username == username)
         )
         
         if not user:
@@ -64,24 +62,22 @@ async def check_onboarding(telegram_id: int):
         return {
             "exists": True,
             "onboarding_done": user.onboarding_done,
-            "name": user.name,
             "subscription_status": user.subscription_status,
             "pair_id": user.pair_id,
             "partner_username": partner.username if partner else None
         }
 
-@router.get("/api/get_profile/{telegram_id}")
-async def get_profile(telegram_id: int):
+@router.get("/api/get_profile/{username}")
+async def get_profile(username: str):
     async with async_session() as session:
         user = await session.scalar(
-            select(User).where(User.telegram_id == str(telegram_id))
+            select(User).where(User.username == username)
         )
         
         if not user:
             raise HTTPException(status_code=404, detail="User not found")
         
         return {
-            "name": user.name,
             "gender": user.gender,
             "relationship_date": str(user.relationship_date) if user.relationship_date else None,
             "city": user.city,
@@ -93,13 +89,12 @@ async def get_profile(telegram_id: int):
 async def update_profile(data: OnboardingData):
     async with async_session() as session:
         user = await session.scalar(
-            select(User).where(User.telegram_id == str(data.telegram_id))
+            select(User).where(User.username == data.username)
         )
         
         if not user:
             raise HTTPException(status_code=404, detail="User not found")
         
-        user.name = data.name
         user.gender = data.gender
         user.relationship_date = datetime.date.fromisoformat(data.relationship_date)
         user.city = data.city
@@ -110,11 +105,11 @@ async def update_profile(data: OnboardingData):
         
         return {"status": "ok"}
 
-@router.post("/api/break_pair/{telegram_id}")
-async def break_pair(telegram_id: int):
+@router.post("/api/break_pair/{username}")
+async def break_pair(username: str):
     async with async_session() as session:
         user = await session.scalar(
-            select(User).where(User.telegram_id == str(telegram_id))
+            select(User).where(User.username == username)
         )
         
         if not user:
@@ -145,7 +140,7 @@ async def break_pair(telegram_id: int):
             if user2:
                 try:
                     await bot.send_message(
-                        user2.telegram_id,
+                        user2.username,
                         "💔 Ваш партнёр разорвал пару."
                     )
                 except Exception as e:

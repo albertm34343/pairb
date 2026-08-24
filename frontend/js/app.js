@@ -82,9 +82,10 @@ function showNoPair() {
 function startPairCheck() {
     if (pairCheckInterval) clearInterval(pairCheckInterval);
     pairCheckInterval = setInterval(async () => {
-        const telegram_id = tg.initDataUnsafe?.user?.id;
+        const username = tg.initDataUnsafe?.user?.username;
+        if (!username) return;
         try {
-            const response = await fetch(`/api/check_onboarding/${telegram_id}`);
+            const response = await fetch(`/api/check_onboarding/${username}`);
             const data = await response.json();
             if (!data.exists || !data.pair_id) {
                 showNoPair();
@@ -96,15 +97,15 @@ function startPairCheck() {
 }
 
 async function checkOnboarding() {
-    const telegram_id = tg.initDataUnsafe?.user?.id;
+    const username = tg.initDataUnsafe?.user?.username;
     
-    if (!telegram_id) {
-        showToast('Ошибка: нет данных пользователя');
+    if (!username) {
+        showToast('Установите username в Telegram');
         return;
     }
     
     try {
-        const response = await fetch(`/api/check_onboarding/${telegram_id}`);
+        const response = await fetch(`/api/check_onboarding/${username}`);
         const data = await response.json();
         
         if (!data.exists || !data.pair_id) {

@@ -1,7 +1,6 @@
 async function submitOnboarding() {
     const data = {
-        telegram_id: tg.initDataUnsafe?.user?.id,
-        name: document.getElementById('name').value.trim(),
+        username: tg.initDataUnsafe?.user?.username,
         gender: document.getElementById('gender').value,
         relationship_date: document.getElementById('relationship_date').value,
         city: document.getElementById('city').value.trim(),
@@ -9,7 +8,7 @@ async function submitOnboarding() {
         shared_hobbies: document.getElementById('shared_hobbies').value.trim()
     };
     
-    if (!data.name || !data.gender || !data.relationship_date || !data.city) {
+    if (!data.gender || !data.relationship_date || !data.city) {
         showToast('Заполните все поля');
         return;
     }

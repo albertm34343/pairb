@@ -6,15 +6,12 @@ class User(Base):
     __tablename__ = "users"
     
     id = Column(Integer, primary_key=True)
-    telegram_id = Column(String, unique=True, nullable=False)
-    username = Column(String)
+    username = Column(String, unique=True, nullable=False)
     pair_id = Column(Integer, ForeignKey("pairs.id"))
     onboarding_done = Column(Boolean, default=False)
     subscription_status = Column(String, default="free")
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
     
-    # Онбординг
-    name = Column(String)
     gender = Column(String)
     relationship_date = Column(Date)
     city = Column(String)
